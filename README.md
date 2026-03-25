@@ -101,7 +101,6 @@ Page for viewing polls and voting results
 8. as a user, I can see where my friends are in relation to the destination
 9. as a user, I can edit my polls
 10. as a user, I clearly see which poll I voted on and which poll is decided on
-11. as a user, I clearly see which poll I voted on and which poll is decided on
 
 ## Research Topics
 
