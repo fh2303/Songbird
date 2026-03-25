@@ -59,7 +59,7 @@ An Example Poll with Embedded details:
 
 (**\_TODO**: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc.\_)
 
-Link to Figma wireframe: https://www.figma.com/board/wN67poP2ezvqhQkjSDcOYV/Untitled?node-id=0-1&t=Ow88ODcwuaYI81mR-1
+Link to Figma wireframe: https://www.figma.com/board/wN67poP2ezvqhQkjSDcOYV/App-Wireframe?t=Ow88ODcwuaYI81mR-0
 
 Pages for login/register
 
@@ -126,5 +126,6 @@ Page for viewing polls and voting results
 
 (**\_TODO**: list any tutorials/references/etc. that you've based your code off of\_)
 
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
+1. [tutorial on leaflet.js](https://leafletjs.com/reference.html)
+2. [tutorial on socket.io](https://socket.io/docs/v4/)
+3. [passport.js authentication docs](http://passportjs.org/docs)
