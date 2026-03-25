@@ -1,61 +1,63 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
+The content below is an example project proposal / requirements document. Replace the text below the lines marked "**TODO**" with details specific to your project. Remove the "TODO" lines.
 
-(___TODO__: your project name_)
+(**\_TODO**: your project name\_)
 
-# Shoppy Shoperson 
+# Shoppy Shoperson
 
 ## Overview
 
-(___TODO__: a brief one or two paragraph, high-level description of your project_)
+(**\_TODO**: a brief one or two paragraph, high-level description of your project\_)
 
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
+Growing up, it was easier to hang out with friends, once everyone finished homework or sports, you could quickly follow through with plans. Now that everyone's grown up, it's harder to schedule hang outs due to obligations or other blocking factors.
 
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
-
+appname is a solution to that problem: it will allow everyone in a group chat to post polls that clearly state the details of a hang out such as idea, time, location. The current time we live in is quite fast paced, and any friction when planning could likely lead to abandoned plans. By streamlining the hang out experience as much as possible, appname hopes to promote more fun times with friends.
 
 ## Data Model
 
-(___TODO__: a description of your application's data and their relationships to each other_) 
+(**\_TODO**: a description of your application's data and their relationships to each other\_)
 
-The application will store Users, Lists and Items
+The application will store Users, Polls and User Locations
 
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
+- users can have multiple polls (references)
+- each poll can have multiple details and options (embedding)
+- user locations can be tracked for everyone in a hangout to see
 
-(___TODO__: sample documents_)
+(**\_TODO**: sample documents\_)
 
 An Example User:
 
 ```javascript
 {
-  username: "shannonshopper",
-  hash: // a password hash,
-  lists: // an array of references to List documents
+  username: "the_mainPlanner",
+  hash: // password hash
+  polls: // array of references to poll documents
+  currentLocation: // location object { lat, long }
 }
 ```
 
-An Example List with Embedded Items:
+An Example Poll with Embedded details:
 
 ```javascript
 {
-  user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
+  creator: // reference to a User object
+  eventDetails: {
+    title: "Group picnic at Central Park",
+    location: "1802 65th Street Transverse, 1802 E 65th St, New York, NY 10065"
+    time: "3/29/26 @12pm" // some kind of Time/Date object to handle this
+  }
+  votes: // number of interested users
+  voters: // who is intere  sted, user references
   createdAt: // timestamp
 }
 ```
 
+## [Link to Commented First Draft Schema](db.js)
 
-## [Link to Commented First Draft Schema](db.js) 
-
-(___TODO__: create a first draft of your Schemas in db.js and link to it_)
+(**\_TODO**: create a first draft of your Schemas in db.js and link to it\_)
 
 ## Wireframes
 
-(___TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc._)
+(**\_TODO**: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc.\_)
 
 /list/create - page for creating a new shopping list
 
@@ -71,13 +73,13 @@ An Example List with Embedded Items:
 
 ## Site map
 
-(___TODO__: draw out a site map that shows how pages are related to each other_)
+(**\_TODO**: draw out a site map that shows how pages are related to each other\_)
 
 Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
 
 ## User Stories or Use Cases
 
-(___TODO__: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://www.mongodb.com/download-center?jmp=docs&_ga=1.47552679.1838903181.1489282706#previous)_)
+(**\_TODO**: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://www.mongodb.com/download-center?jmp=docs&_ga=1.47552679.1838903181.1489282706#previous)\_)
 
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
@@ -88,29 +90,28 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 ## Research Topics
 
-(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_)
+(**\_TODO**: the research topics that you're planning on working on along with their point values... and the total points of research topics listed\_)
 
-* (5 points) Integrate user authentication
-    * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
+- (5 points) Integrate user authentication
+  - I'm going to be using passport for user authentication
+  - And account has been made for testing; I'll email you the password
+  - see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
+  - see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
+- (4 points) Perform client side form validation using a JavaScript library
+  - see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
+  - if you put in a number that's greater than 5, an error message will appear in the dom
+- (5 points) vue.js
+  - used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
 
-10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit_)
+10 points total out of 8 required points (**\_TODO**: addtional points will **not** count for extra credit\_)
 
+## [Link to Initial Main Project File](app.js)
 
-## [Link to Initial Main Project File](app.js) 
-
-(___TODO__: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js_)
+(**\_TODO**: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js\_)
 
 ## Annotations / References Used
 
-(___TODO__: list any tutorials/references/etc. that you've based your code off of_)
+(**\_TODO**: list any tutorials/references/etc. that you've based your code off of\_)
 
 1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
 2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
