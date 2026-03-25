@@ -1,5 +1,5 @@
 {
-  "type": "commonjs",
+  "type": "module",
   "name": "final-project-fh2303",
   "version": "1.0.0",
   "description": "The content below is an example project proposal / requirements document. Replace the text below the lines marked \"**TODO**\" with details specific to your project. Remove the \"TODO\" lines.",
@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303#readme",
   "dependencies": {
+    "express": "^5.2.1",
+    "hbs": "^4.2.0",
     "mongoose": "^9.3.2"
   }
 }

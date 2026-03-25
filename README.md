@@ -59,23 +59,33 @@ An Example Poll with Embedded details:
 
 (**\_TODO**: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc.\_)
 
-/list/create - page for creating a new shopping list
+Link to Figma wireframe: https://www.figma.com/board/wN67poP2ezvqhQkjSDcOYV/Untitled?node-id=0-1&t=Ow88ODcwuaYI81mR-1
 
-![list create](documentation/list-create.png)
+Pages for login/register
 
-/list - page for showing all shopping lists
+![list](documentation/login.png)
 
-![list](documentation/list.png)
+Main Page
 
-/list/slug - page for showing specific shopping list
+![list](documentation/main.png)
 
-![list](documentation/list-slug.png)
+Page for seeing where everyone is
+
+![list](documentation/map.png)
+
+Pages for chatting in a group and posting kinds of polls
+
+![list create](documentation/groupchat-polls.png)
+
+Page for viewing polls and voting results
+
+![list](documentation/pollviewer.png)
 
 ## Site map
 
 (**\_TODO**: draw out a site map that shows how pages are related to each other\_)
 
-Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
+![list](documentation/appMap.png)
 
 ## User Stories or Use Cases
 
@@ -83,25 +93,29 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can create a new grocery list
-4. as a user, I can view all of the grocery lists I've created in a single list
-5. as a user, I can add items to an existing grocery list
-6. as a user, I can cross off items in an existing grocery list
+3. as a user, I can make a group chat(s) and message in it(them)
+4. as a user, I can post polls to the group chat
+5. as a user, I can post photos to the group chat
+6. as a user, I can view and vote on all of the existing polls
+7. as a user, I can submit alternate proposals
+8. as a user, I can see where my friends are in relation to the destination
+9. as a user, I can edit my polls
+10. as a user, I clearly see which poll I voted on and which poll is decided on
+11. as a user, I clearly see which poll I voted on and which poll is decided on
 
 ## Research Topics
 
 (**\_TODO**: the research topics that you're planning on working on along with their point values... and the total points of research topics listed\_)
 
-- (5 points) Integrate user authentication
-  - I'm going to be using passport for user authentication
-  - And account has been made for testing; I'll email you the password
-  - see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-  - see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-- (4 points) Perform client side form validation using a JavaScript library
-  - see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-  - if you put in a number that's greater than 5, an error message will appear in the dom
-- (5 points) vue.js
-  - used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
+- (5 points) Map Integration using Leaflet.js and Geolocation API
+  - I will use the Leaflet.js library to display an interactive map for everyone to see each others locations.
+  - The app will use the browser's Geolocation API to ask users for their current coordinates.
+  - This allows users to see where the event is and where their friends are in relation to the meeting point.
+- (4 points) Allow for instant messaging and real time updates with Socket.io
+  - Want fast communication and updates so people can efficiently make and follow through with plans.
+- (4 points) User Authentication with Passport.js
+  - Passport.js for user authentication.
+  - This is so the app knows who is sharing their location and prevents unknown users from voting.
 
 10 points total out of 8 required points (**\_TODO**: addtional points will **not** count for extra credit\_)
 
