@@ -2,7 +2,7 @@ The content below is an example project proposal / requirements document. Replac
 
 (**\_TODO**: your project name\_)
 
-# Shoppy Shoperson
+# Huddle
 
 ## Overview
 
@@ -10,7 +10,7 @@ The content below is an example project proposal / requirements document. Replac
 
 Growing up, it was easier to hang out with friends, once everyone finished homework or sports, you could quickly follow through with plans. Now that everyone's grown up, it's harder to schedule hang outs due to obligations or other blocking factors.
 
-appname is a solution to that problem: it will allow everyone in a group chat to post polls that clearly state the details of a hang out such as idea, time, location. The current time we live in is quite fast paced, and any friction when planning could likely lead to abandoned plans. By streamlining the hang out experience as much as possible, appname hopes to promote more fun times with friends.
+Huddle is a solution to that problem: it will allow everyone in a group chat to post polls that clearly state the details of a hang out such as idea, time, location. The current time we live in is quite fast paced, and any friction when planning could likely lead to abandoned plans. By streamlining the hang out experience as much as possible, Huddle hopes to promote more fun times with friends.
 
 ## Data Model
 
@@ -112,9 +112,12 @@ Page for viewing polls and voting results
   - This allows users to see where the event is and where their friends are in relation to the meeting point.
 - (4 points) Allow for instant messaging and real time updates with Socket.io
   - Want fast communication and updates so people can efficiently make and follow through with plans.
+  - It can reestablish connections and also do targeted connections to send messages to a specific group chat.
+  - Shows typing when user is typing.
 - (4 points) User Authentication with Passport.js
-  - Passport.js for user authentication.
+  - Passport.js allows for user authentication.
   - This is so the app knows who is sharing their location and prevents unknown users from voting.
+  - It also can help manage user sessions so that they can stay logged in.
 
 10 points total out of 8 required points (**\_TODO**: addtional points will **not** count for extra credit\_)
 
