@@ -21,6 +21,8 @@
   "dependencies": {
     "express": "^5.2.1",
     "hbs": "^4.2.0",
-    "mongoose": "^9.3.2"
+    "mongoose": "^9.3.2",
+    "nodemon": "^3.1.14",
+    "socket.io": "^4.8.3"
   }
 }
