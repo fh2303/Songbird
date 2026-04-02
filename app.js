@@ -13,28 +13,8 @@ const io = new Server(server, {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// app.set("view engine", "hbs");
-// app.set("views", path.join(dirname, "views"));
-
-// app.get("/", (req, res) => {
-//   res.send("Hello");
-// });
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "test.html"));
-});
-
-// io.on("connection", (socket) => {
-//   console.log("A user connected");
-//   socket.on("disconnect", () => {
-//     console.log("A user disconnected");
-//   });
-// });
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("Message: " + msg);
-  });
 });
 
 io.on("connection", (socket) => {
@@ -47,3 +27,23 @@ const PORT = 3000;
 server.listen(PORT, () => {
   console.log("Server started");
 });
+
+// app.set("view engine", "hbs");
+// app.set("views", path.join(dirname, "views"));
+
+// app.get("/", (req, res) => {
+//   res.send("Hello");
+// });
+
+// io.on("connection", (socket) => {
+//   console.log("A user connected");
+//   socket.on("disconnect", () => {
+//     console.log("A user disconnected");
+//   });
+// });
+
+// io.on("connection", (socket) => {
+//   socket.on("chat message", (msg) => {
+//     console.log("Message: " + msg);
+//   });
+// });
