@@ -20,18 +20,27 @@ function GroupChat() {
     }
 
     function onChatMessage(value) {
-      setMessages((previous) => [...previous, value]);
+      setMessages((previous = []) => [...previous, value]);
       window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function onMessageDeleted(deleteId) {
+      setMessages((previous = []) => {
+        const temp = previous.filter((msg) => msg._id !== deleteId);
+        return temp;
+      });
     }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("chat message", onChatMessage);
+    socket.on("message deleted", onMessageDeleted);
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("chat message", onChatMessage);
+      socket.off("message deleted", onMessageDeleted);
     };
   }, []);
 
