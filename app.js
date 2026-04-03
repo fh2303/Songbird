@@ -6,24 +6,22 @@ import { Server } from "socket.io";
 
 const app = express();
 const server = createServer(app);
+
 const io = new Server(server, {
-  connectionStateRecovery: {},
-});
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "test.html"));
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
 });
 
 io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
+    console.log("Message received:", msg); // Add this!
     io.emit("chat message", msg);
   });
 });
 
-const PORT = 3000;
+const PORT = 4000;
 server.listen(PORT, () => {
   console.log("Server started");
 });
