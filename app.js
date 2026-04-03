@@ -6,12 +6,25 @@ import { Server } from "socket.io";
 
 const app = express();
 const server = createServer(app);
+
 const io = new Server(server, {
-  connectionStateRecovery: {},
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
 });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+io.on("connection", (socket) => {
+  socket.on("chat message", (msg) => {
+    console.log("Message received:", msg); // Add this!
+    io.emit("chat message", msg);
+  });
+});
+
+const PORT = 4000;
+server.listen(PORT, () => {
+  console.log("Server started");
+});
 
 // app.set("view engine", "hbs");
 // app.set("views", path.join(dirname, "views"));
@@ -20,10 +33,6 @@ const __dirname = path.dirname(__filename);
 //   res.send("Hello");
 // });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "test.html"));
-});
-
 // io.on("connection", (socket) => {
 //   console.log("A user connected");
 //   socket.on("disconnect", () => {
@@ -31,19 +40,8 @@ app.get("/", (req, res) => {
 //   });
 // });
 
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("Message: " + msg);
-  });
-});
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
-  });
-});
-
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log("Server started");
-});
+// io.on("connection", (socket) => {
+//   socket.on("chat message", (msg) => {
+//     console.log("Message: " + msg);
+//   });
+// });
