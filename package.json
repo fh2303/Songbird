@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303#readme",
   "dependencies": {
+    "dotenv": "^17.4.0",
     "express": "^5.2.1",
     "hbs": "^4.2.0",
+    "mongodb": "^7.1.1",
     "mongoose": "^9.3.2",
     "nodemon": "^3.1.14",
     "socket.io": "^4.8.3"

@@ -1,47 +1,46 @@
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import { Message } from "./db.js";
+import mongoose from "mongoose";
+import { config } from "dotenv";
 
+config();
 const app = express();
 const server = createServer(app);
 
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to db"));
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("Message received:", msg); // Add this!
-    io.emit("chat message", msg);
+  socket.on("chat message", async (msg) => {
+    try {
+      const savedMsg = await Message.create({ content: msg });
+      io.emit("chat message", savedMsg);
+    } catch (err) {
+      console.error("Mongo went wrong", err);
+    }
+  });
+
+  socket.on("delete message", async (id) => {
+    try {
+      await Message.findByIdAndDelete(id);
+      io.emit("message deleted", id);
+    } catch (err) {
+      console.error("Can't delete", err);
+    }
   });
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
   console.log("Server started");
 });
-
-// app.set("view engine", "hbs");
-// app.set("views", path.join(dirname, "views"));
-
-// app.get("/", (req, res) => {
-//   res.send("Hello");
-// });
-
-// io.on("connection", (socket) => {
-//   console.log("A user connected");
-//   socket.on("disconnect", () => {
-//     console.log("A user disconnected");
-//   });
-// });
-
-// io.on("connection", (socket) => {
-//   socket.on("chat message", (msg) => {
-//     console.log("Message: " + msg);
-//   });
-// });
