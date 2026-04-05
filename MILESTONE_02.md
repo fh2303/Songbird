@@ -16,7 +16,9 @@ URL to github that shows line of code where research topic(s) are used / impleme
 
 ---
 
-[(TODO: add link to github url that shows line or lines of code that demonstrate in progress work on at least one research topic)](https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/b1d18c78e0215592c7012a94db799dd4cf1ef842/app.js#L20-L38)
+## Progress in Research Topic
+
+https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/b1d18c78e0215592c7012a94db799dd4cf1ef842/app.js#L20-L38
 
 ## References
 
