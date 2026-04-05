@@ -46,7 +46,9 @@ function GroupChat() {
 
   return (
     <div className={styles.body}>
-      <Events events={messages} />
+      <div className={styles.messagesWrapper}>
+        <Events events={messages} />
+      </div>
       <div className={styles.wrapper}>
         <ConnectionState isConnected={isConnected} />
         <ConnectionManager />

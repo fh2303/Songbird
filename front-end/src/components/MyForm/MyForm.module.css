@@ -1,7 +1,10 @@
 .form {
-  margin-top: auto;
-  position: fixed;
-  bottom: 0;
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  padding-top: 20px;
+  border-top: 2px solid black;
 }
 
 .input {
@@ -13,6 +16,7 @@
 .input:hover {
   box-shadow: 0 0 10px palegreen;
 }
+
 .input:focus {
   outline: none;
   box-shadow: 0 0 10px palegreen;
@@ -21,12 +25,4 @@
 .button {
   width: fit-content;
   height: 2.5rem;
-}
-
-.button:hover {
-  box-shadow: 0 0 10px palegreen;
-}
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 10px palegreen;
 }

@@ -1,17 +1,14 @@
+import "./config.mjs";
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { Message } from "./db.js";
 import mongoose from "mongoose";
-import { config } from "dotenv";
 
-config();
 const app = express();
 const server = createServer(app);
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to db"));
+mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
 const io = new Server(server, {
   cors: {
