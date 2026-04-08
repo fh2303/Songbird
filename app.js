@@ -3,6 +3,7 @@ import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { Message } from "./db.js";
+import { Poll } from "./db.js";
 import mongoose from "mongoose";
 
 const app = express();
@@ -24,6 +25,22 @@ io.on("connection", (socket) => {
       io.emit("chat message", savedMsg);
     } catch (err) {
       console.error("Mongo went wrong", err);
+    }
+  });
+
+  socket.on("posting poll", async (poll) => {
+    try {
+      const savedPoll = await Poll.create({
+        eventDetails: {
+          title: poll.title,
+          locationName: poll.locationName,
+          time: poll.time,
+          details: poll.details,
+        },
+      });
+      io.emit("sending poll", savedPoll);
+    } catch (err) {
+      console.log("Cant post poll", err);
     }
   });
 

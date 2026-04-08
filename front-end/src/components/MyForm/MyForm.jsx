@@ -11,16 +11,23 @@ export function MyForm() {
     setValue("");
   }
 
+  function onPost(event) {
+    event.preventDefault;
+    socket.emit("make poll");
+  }
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <input
-        className={styles.input}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <button className={styles.button} type="submit">
-        Submit
-      </button>
-    </form>
+    <>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <input
+          className={styles.input}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button className={styles.button} type="submit">
+          Submit
+        </button>
+      </form>
+    </>
   );
 }

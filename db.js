@@ -15,11 +15,12 @@ const userSchema = new Schema(
 
 const pollSchema = new Schema(
   {
-    creator: Schema.Types.ObjectId,
+    creator: { type: Schema.Types.ObjectId, default: "Anonymous" },
     eventDetails: {
       title: { type: String, required: true },
       locationName: String,
       time: Date,
+      details: String,
     },
     votes: { type: Number, default: 0 },
     voters: [{ type: Schema.Types.ObjectId, ref: "User" }],

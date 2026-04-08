@@ -5,10 +5,13 @@ import { ConnectionState } from "../../components/ConnectionState/ConnectionStat
 import { ConnectionManager } from "../../components/ConnectionManager/ConnectionManager.jsx";
 import { Events } from "../../components/Events/Events.jsx";
 import { MyForm } from "../../components/MyForm/MyForm.jsx";
+import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 
 function GroupChat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
+  const [poll, setPoll] = useState({});
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     function onConnect() {
@@ -31,16 +34,22 @@ function GroupChat() {
       });
     }
 
+    function onPollSent(poll) {
+      setMessages((previous = []) => [...previous, poll]);
+    }
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("chat message", onChatMessage);
     socket.on("message deleted", onMessageDeleted);
+    socket.on("sending poll", onPollSent);
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("chat message", onChatMessage);
       socket.off("message deleted", onMessageDeleted);
+      socket.off("sending poll", onPollSent);
     };
   }, []);
 
@@ -49,10 +58,16 @@ function GroupChat() {
       <div className={styles.messagesWrapper}>
         <Events events={messages} />
       </div>
+      <div className={styles.pollWrapper}>
+        {visible ? <ProposalForm></ProposalForm> : ""}
+      </div>
       <div className={styles.wrapper}>
         <ConnectionState isConnected={isConnected} />
         <ConnectionManager />
       </div>
+      <button type="button" onClick={() => setVisible(!visible)}>
+        Create Poll
+      </button>
       <MyForm />
     </div>
   );
