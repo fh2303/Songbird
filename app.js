@@ -28,19 +28,13 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("posting poll", async (poll) => {
+  socket.on("posting proposal", async (poll) => {
     try {
-      const savedPoll = await Poll.create({
-        eventDetails: {
-          title: poll.title,
-          locationName: poll.locationName,
-          time: poll.time,
-          details: poll.details,
-        },
-      });
-      io.emit("sending poll", savedPoll);
+      console.log("Received");
+      const savedPoll = await Poll.create(poll);
+      io.emit("sending proposal", savedPoll);
     } catch (err) {
-      console.log("Cant post poll", err);
+      console.log("Cant post proposal", err);
     }
   });
 

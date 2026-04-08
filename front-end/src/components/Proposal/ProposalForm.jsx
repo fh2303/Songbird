@@ -1,5 +1,5 @@
-import styles from "./ProposalForm.module.css";
 import { socket } from "../../socket.js";
+import styles from "./ProposalForm.module.css";
 import { useState } from "react";
 
 function ProposalForm() {
@@ -20,7 +20,7 @@ function ProposalForm() {
 
   function onSubmit(event) {
     event.preventDefault();
-    socket.emit("posting poll", pollData);
+    socket.emit("posting proposal", pollData);
   }
 
   return (

@@ -34,22 +34,27 @@ function GroupChat() {
       });
     }
 
-    function onPollSent(poll) {
-      setMessages((previous = []) => [...previous, poll]);
+    function onProposalSent(proposal) {
+      const proposalAsMsg = {
+        ...proposal,
+        content: `PROPOSAL: ${proposal.eventDetails.title} at ${proposal.eventDetails.locationName}. When: ${proposal.eventDetails.time}`,
+      };
+
+      setMessages((previous = []) => [...previous, proposalAsMsg]);
     }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("chat message", onChatMessage);
     socket.on("message deleted", onMessageDeleted);
-    socket.on("sending poll", onPollSent);
+    socket.on("sending proposal", onProposalSent);
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("chat message", onChatMessage);
       socket.off("message deleted", onMessageDeleted);
-      socket.off("sending poll", onPollSent);
+      socket.off("sending proposal", onProposalSent);
     };
   }, []);
 

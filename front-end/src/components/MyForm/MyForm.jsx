@@ -11,11 +11,6 @@ export function MyForm() {
     setValue("");
   }
 
-  function onPost(event) {
-    event.preventDefault;
-    socket.emit("make poll");
-  }
-
   return (
     <>
       <form className={styles.form} onSubmit={onSubmit}>
