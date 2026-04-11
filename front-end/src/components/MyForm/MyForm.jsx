@@ -12,15 +12,17 @@ export function MyForm() {
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <input
-        className={styles.input}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <button className={styles.button} type="submit">
-        Submit
-      </button>
-    </form>
+    <>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <input
+          className={styles.input}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button className={styles.button} type="submit">
+          Submit
+        </button>
+      </form>
+    </>
   );
 }

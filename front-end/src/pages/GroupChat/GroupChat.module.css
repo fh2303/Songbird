@@ -27,3 +27,9 @@
   max-width: 800px;
   margin: 0;
 }
+
+.pollWrapper {
+  position: absolute;
+  z-index: 10;
+  /* height: fit-content; */
+}
