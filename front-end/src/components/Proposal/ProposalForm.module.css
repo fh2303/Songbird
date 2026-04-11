@@ -25,7 +25,7 @@
   flex-direction: column;
   border: 2px solid var(--dark-moss2);
   border-radius: 15px;
-  height: autp;
+  height: auto;
   width: 20vw;
   align-items: center;
   padding: 15px 0px;

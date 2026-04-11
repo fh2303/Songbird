@@ -6,6 +6,7 @@ import { ConnectionManager } from "../../components/ConnectionManager/Connection
 import { Events } from "../../components/Events/Events.jsx";
 import { MyForm } from "../../components/MyForm/MyForm.jsx";
 import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
+import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 
 function GroupChat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -34,13 +35,34 @@ function GroupChat() {
       });
     }
 
-    function onProposalSent(proposal) {
-      const proposalAsMsg = {
-        ...proposal,
-        content: `PROPOSAL: ${proposal.eventDetails.title} at ${proposal.eventDetails.locationName}. When: ${proposal.eventDetails.time}`,
-      };
+    // function onProposalSent(proposal) {
+    //   const proposalAsMsg = {
+    //     ...proposal,
+    //     content: `PROPOSAL: ${proposal.eventDetails.title} at ${proposal.eventDetails.locationName}. When: ${proposal.eventDetails.time}`,
+    //   };
 
-      setMessages((previous = []) => [...previous, proposalAsMsg]);
+    //   setMessages((previous = []) => [...previous, proposalAsMsg]);
+    // }
+
+    // function onProposalSent(proposal) {
+    //   console.log("New Proposal ID:", proposal._id); // Are these always different?
+    //   const proposalAsMsg = {
+    //     ...proposal,
+    //     _id: proposal._id || Date.now(),
+    //     type: "proposal",
+    //   };
+
+    //   setMessages((previous) => [...previous, proposalAsMsg]);
+    // }
+
+    function onProposalSent(proposal) {
+      // console.log("New Proposal ID:", proposal._id); // Are these always different?
+      setMessages((prevMessages) => {
+        if (prevMessages.some((m) => m._id === proposal._id))
+          return prevMessages;
+
+        return [...prevMessages, { ...proposal, type: "proposal" }];
+      });
     }
 
     socket.on("connect", onConnect);
