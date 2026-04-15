@@ -1,27 +1,46 @@
 import styles from "../loginPages.module.css";
-import styles2 from "./Register.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const confirm = e.target.confirm.value;
     if (password !== confirm) {
       setError("Passwords do not match!");
       return;
-    } else {
-      navigate("/signin");
+    }
+    try {
+      const response = await fetch("http://localhost:4000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          username: email,
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        navigate("/signin");
+      } else {
+        setError("Email taken");
+      }
+    } catch (err) {
+      setError("Try again");
     }
   };
   return (
     <div className={styles.body}>
       <section className="registerPage">
         <div className={styles.main}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <p className={styles.signTitle}>Register</p>
             <Link to="/signin" className={styles.switchPage}>
               or Sign in?

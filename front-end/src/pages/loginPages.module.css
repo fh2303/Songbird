@@ -90,7 +90,9 @@ form {
   font-size: 0.9rem;
   height: 1.2rem;
   margin-top: 0.5rem;
+  margin-bottom: -0.2rem;
   text-align: center;
+  color: var(--text-color);
 }
 
 .switchPage:visited {
