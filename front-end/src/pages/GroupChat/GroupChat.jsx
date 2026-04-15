@@ -35,28 +35,7 @@ function GroupChat() {
       });
     }
 
-    // function onProposalSent(proposal) {
-    //   const proposalAsMsg = {
-    //     ...proposal,
-    //     content: `PROPOSAL: ${proposal.eventDetails.title} at ${proposal.eventDetails.locationName}. When: ${proposal.eventDetails.time}`,
-    //   };
-
-    //   setMessages((previous = []) => [...previous, proposalAsMsg]);
-    // }
-
-    // function onProposalSent(proposal) {
-    //   console.log("New Proposal ID:", proposal._id); // Are these always different?
-    //   const proposalAsMsg = {
-    //     ...proposal,
-    //     _id: proposal._id || Date.now(),
-    //     type: "proposal",
-    //   };
-
-    //   setMessages((previous) => [...previous, proposalAsMsg]);
-    // }
-
     function onProposalSent(proposal) {
-      // console.log("New Proposal ID:", proposal._id); // Are these always different?
       setMessages((prevMessages) => {
         if (prevMessages.some((m) => m._id === proposal._id))
           return prevMessages;

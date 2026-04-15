@@ -7,15 +7,20 @@
 }
 
 .title {
-  margin: 0;
-  padding-bottom: 30px;
+  font-size: larger;
+  padding-bottom: 5px;
 }
+
+/* .header {
+  width: 100%;
+} */
 
 .wrapperMain {
   display: flex;
   justify-content: center;
   align-items: center;
   /* height: 100vh; */
+  cursor: pointer;
 }
 
 .wrapperPoll {
@@ -27,7 +32,26 @@
   border-radius: 15px;
   height: auto;
   width: 20vw;
-  align-items: center;
-  padding: 15px 0px;
+  min-width: 0; /* align-items: center; */
+  height: auto;
+  padding: 15px 0px 15px 5px;
   font-size: larger;
+  overflow: auto;
+}
+
+hr {
+  height: 1px;
+  background-color: #1c1e14;
+  width: 100%;
+  border: none;
+}
+summary {
+  cursor: pointer;
+  outline: none;
+}
+
+.details {
+  word-break: break-word;
+  margin: 0;
+  padding: 10px 0;
 }

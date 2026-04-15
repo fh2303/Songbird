@@ -1,4 +1,3 @@
-import { socket } from "../../socket.js";
 import styles from "./ProposalPost.module.css";
 import { useState, useEffect } from "react";
 
@@ -7,15 +6,24 @@ function ProposalPost({ proposal }) {
     eventDetails: { title, locationName, time, details },
   } = proposal || {};
 
+  function handleExpand() {
+    console.log("hello");
+  }
   return (
-    <div className={styles.wrapperMain}>
+    <div className={styles.wrapperMain} onClick={handleExpand}>
       <div className={styles.wrapperPoll}>
-        <p className={styles.title}>Proposal</p>
-        <p>{title}</p>
+        <div className={styles.header}>
+          <p className={styles.title}>{title}</p>
+        </div>
         <hr />
-        <p>{locationName}</p>
-        <p>{time}</p>
-        <p>{details}</p>
+        <p>- {locationName}</p>
+        <hr />
+        <p>- {time}</p>
+        <hr />
+        <details>
+          <summary>Details</summary>
+          <p className={styles.details}>- {details}</p>
+        </details>
       </div>
     </div>
   );
