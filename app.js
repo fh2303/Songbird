@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 const app = express();
 const server = createServer(app);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-app.use(express.static(path.join(__dirname, "../front-end/dist")));
+app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
@@ -61,7 +61,7 @@ app.get("/*path", (req, res) => {
   if (req.path.startsWith("/api")) {
     return res.status(404).json({ message: "Not found" });
   }
-  res.sendFile(path.join(__dirname, "../front-end/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "/front-end/dist", "index.html"));
 });
 
 const io = new Server(server, {
