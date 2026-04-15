@@ -17,12 +17,12 @@ app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL || "http://localhost:5173",
+//     credentials: true,
+//   })
+// );
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
