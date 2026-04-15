@@ -56,7 +56,6 @@ function GroupChat() {
     // }
 
     function onProposalSent(proposal) {
-      // console.log("New Proposal ID:", proposal._id); // Are these always different?
       setMessages((prevMessages) => {
         if (prevMessages.some((m) => m._id === proposal._id))
           return prevMessages;

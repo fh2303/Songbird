@@ -1,0 +1,63 @@
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background-image: linear-gradient(
+    hsla(293, 27%, 37%, 0.493),
+    hsla(305, 22%, 10%, 0.863)
+  );
+  background-size: cover;
+}
+
+.main {
+  background-color: rgba(114, 46, 160, 0.61);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  min-height: 25rem;
+  min-width: 100%;
+}
+
+.signTitle {
+  align-self: center;
+  margin-top: 1rem;
+  font-size: 2.5rem;
+  color: purple;
+}
+
+.usernameDiv {
+  margin-top: 20px;
+  align-self: center;
+}
+
+.passwordDiv {
+  margin-top: 30px;
+  align-self: center;
+  margin-bottom: 14px;
+}
+
+.buttonWrapper button {
+  height: 70%;
+}
+
+form {
+  display: contents;
+  margin: 0;
+  padding: 0;
+}
+
+.signButton {
+  font-family: "Saira", monospace;
+  margin-top: 30px;
+  align-self: center;
+  width: 50%;
+  border-style: 2px black solid;
+  font-size: 0.95rem;
+  color: whitesmoke;
+  background-color: transparent;
+  cursor: pointer;
+}
