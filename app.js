@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 const app = express();
 const server = createServer(app);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-app.use(express.static(path.join(__dirname, "../front-end/src")));
+app.use(express.static(path.join(__dirname, "../front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
@@ -95,7 +95,7 @@ io.on("connection", (socket) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../front-end/src", "index.html"));
+  res.sendFile(path.join(__dirname, "../front-end/dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 4000;
