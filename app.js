@@ -19,7 +19,7 @@ mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   })
 );
@@ -57,6 +57,10 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../front-end/dist", "index.html"));
+});
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -92,10 +96,6 @@ io.on("connection", (socket) => {
       console.error("Can't delete", err);
     }
   });
-});
-
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../front-end/dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 4000;
