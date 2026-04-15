@@ -7,10 +7,10 @@ const userSchema = new Schema(
     name: String,
     age: Number,
     email: { type: String, required: true, lowercase: true },
-    hash: { type: String, required: true },
+    password: { type: String, required: true },
     polls: [Schema.Types.ObjectId],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const pollSchema = new Schema(
@@ -25,7 +25,7 @@ const pollSchema = new Schema(
     // votes: { type: Number, default: 0 },
     // voters: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const messageSchema = new Schema(
@@ -33,7 +33,7 @@ const messageSchema = new Schema(
     content: { type: String, required: true },
     sender: { type: String, default: "Anonymous" },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const User = mongoose.model("User", userSchema);

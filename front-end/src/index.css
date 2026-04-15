@@ -1,3 +1,12 @@
+:root {
+  --dark-moss2: #1c1e14;
+  --dark-moss: #3d4820;
+  --moss: #5f6f29;
+  --muted-chartreuse2: #a1b06b;
+  --muted-chartreuse: #b7c492;
+  --text-color: #d2e0a9;
+}
+
 body {
   padding: 0;
   margin: 0;

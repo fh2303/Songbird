@@ -1,4 +1,6 @@
 .button {
   width: fit-content;
   height: 2.5rem;
+  position: relative;
+  z-index: 10;
 }

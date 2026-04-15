@@ -2,29 +2,35 @@ import styles from "../loginPages.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function SignIn() {
+function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     const email = e.target.email.value;
     const password = e.target.password.value;
-
+    const confirm = e.target.confirm.value;
+    if (password !== confirm) {
+      setError("Passwords do not match!");
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:4000/api/login", {
+      const response = await fetch("http://localhost:4000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          username: email,
+        }),
       });
-
       const data = await response.json();
-
       if (data.success) {
-        navigate("/groupchat");
+        navigate("/signin");
       } else {
-        setError("Invalid sign in");
+        setError("Email taken");
       }
     } catch (err) {
       setError("Try again");
@@ -32,12 +38,12 @@ function SignIn() {
   };
   return (
     <div className={styles.body}>
-      <section className="sign-in">
+      <section className="registerPage">
         <div className={styles.main}>
           <form onSubmit={handleSubmit}>
-            <p className={styles.signTitle}>Sign in</p>
-            <Link to="/register" className={styles.switchPage}>
-              or Register?
+            <p className={styles.signTitle}>Register</p>
+            <Link to="/signin" className={styles.switchPage}>
+              or Sign in?
             </Link>
             <div className={styles.usernameDiv}>
               <input
@@ -57,9 +63,18 @@ function SignIn() {
                 required
               />
             </div>{" "}
+            <div className={styles.passwordDiv}>
+              <input
+                name="confirm"
+                className={styles.password}
+                type="password"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
             {error && <p className={styles.errorMsg}>{error}</p>}
             <button type="submit" className={styles.signButton}>
-              Jump in!
+              Join us!
             </button>
           </form>
         </div>
@@ -68,4 +83,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Register;
