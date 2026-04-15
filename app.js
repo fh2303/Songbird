@@ -57,7 +57,10 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
+app.get("/*path", (req, res) => {
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({ message: "Not found" });
+  }
   res.sendFile(path.join(__dirname, "../front-end/dist", "index.html"));
 });
 
