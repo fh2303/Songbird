@@ -18,7 +18,7 @@ https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303
 
 ## Special Instructions for Form 2
 
-(TODO: if your app requires special instructions to use or if your app requires authentication, add information here; otherwise, leave blank)
+Please make an account with username and password on register page, then sign in to reach group chat
 
 URL(s) to github repository with commits that show progress on research
 
