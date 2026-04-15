@@ -1,43 +1,30 @@
 import styles from "../loginPages.module.css";
+import styles2 from "./Register.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function SignIn() {
+function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = () => {
     e.preventDefault();
     setError("");
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    try {
-      const response = await fetch("/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        navigate("/groupchat");
-      } else {
-        setError("Invalid sign in");
-      }
-    } catch (err) {
-      setError("Try again");
+    if (password !== confirm) {
+      setError("Passwords do not match!");
+      return;
+    } else {
+      navigate("/signin");
     }
   };
   return (
     <div className={styles.body}>
-      <section className="sign-in">
+      <section className="registerPage">
         <div className={styles.main}>
-          <form onSubmit={handleSubmit}>
-            <p className={styles.signTitle}>Sign in</p>
-            <Link to="/register" className={styles.switchPage}>
-              or Register?
+          <form>
+            <p className={styles.signTitle}>Register</p>
+            <Link to="/signin" className={styles.switchPage}>
+              or Sign in?
             </Link>
             <div className={styles.usernameDiv}>
               <input
@@ -57,9 +44,18 @@ function SignIn() {
                 required
               />
             </div>{" "}
+            <div className={styles.passwordDiv}>
+              <input
+                name="confirm"
+                className={styles.password}
+                type="password"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
             {error && <p className={styles.errorMsg}>{error}</p>}
             <button type="submit" className={styles.signButton}>
-              Jump in!
+              Join us!
             </button>
           </form>
         </div>
@@ -68,4 +64,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Register;
