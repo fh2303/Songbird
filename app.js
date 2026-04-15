@@ -7,9 +7,13 @@ import { Message } from "./db.js";
 import { Poll } from "./db.js";
 import { User } from "./db.js";
 import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const server = createServer(app);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(__dirname, "../front-end/src")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
@@ -92,6 +96,10 @@ io.on("connection", (socket) => {
 
 app.get("/", (req, res) => {
   res.send("Please go to static service url to see website");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../front-end/src", "index.html"));
 });
 
 const PORT = process.env.PORT || 4000;
