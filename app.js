@@ -94,10 +94,6 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.send("Please go to static service url to see website");
-});
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../front-end/src", "index.html"));
 });
