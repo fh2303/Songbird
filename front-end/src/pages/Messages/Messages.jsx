@@ -11,6 +11,7 @@ function Messages() {
   function join(roomName) {
     socket.emit("join room", roomName);
     // setActiveRoom(roomName)
+    socket.emit("button clicked", { targetUserId: userId });
   }
 
   useEffect(() => {

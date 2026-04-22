@@ -86,6 +86,7 @@ io.on("connection", (socket) => {
     try {
       // console.log("Received");
       const savedPoll = await Poll.create(poll);
+      const newId = new mongoose.Types.ObjectId();
       io.emit("sending proposal", savedPoll);
     } catch (err) {
       console.log("Cant post proposal", err);
@@ -119,6 +120,26 @@ io.on("connection", (socket) => {
       io.emit("sending room", savedRoom);
     } catch (err) {
       console.error("Can't send room", err);
+    }
+  });
+
+  socket.on("button clicked", async (data) => {
+    try {
+      const { targetUserId, room } = data;
+
+      const updatedUser = await User.findByIdAndUpdate(
+        targetUserId,
+        { $addToSet: { rooms: room } },
+        { new: true },
+      );
+
+      if (updatedUser) {
+        console.log(`Added room ${roomId} to user ${updatedUser.username}`);
+      } else {
+        console.log("User not found");
+      }
+    } catch (error) {
+      console.error("DB error", error);
     }
   });
 });
