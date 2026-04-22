@@ -56,7 +56,6 @@ function Messages() {
               ))}
             </ul>
           </div>
-          {/* <div className={styles.filler} /> */}
         </>
       )}
     </div>
