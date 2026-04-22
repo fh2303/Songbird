@@ -3,7 +3,7 @@ import { socket } from "../../socket.js";
 import { useState, useEffect } from "react";
 import RoomCreate from "../../components/RoomCreate/RoomCreate.jsx";
 
-function Messages() {
+function Messages({ currentUser }) {
   const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
 
@@ -11,7 +11,12 @@ function Messages() {
   function join(roomName) {
     socket.emit("join room", roomName);
     // setActiveRoom(roomName)
-    socket.emit("button clicked", { targetUserId: userId });
+    if (currentUser?._id) {
+      socket.emit("button clicked", {
+        targetUserId: currentUser._id,
+        roomId: roomName,
+      });
+    }
   }
 
   useEffect(() => {
