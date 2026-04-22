@@ -1,0 +1,74 @@
+:root {
+  --dark-moss2: #1c1e14;
+  --dark-moss: #3d4820;
+  --moss: #5f6f29;
+  --muted-chartreuse2: #a1b06b;
+  --muted-chartreuse: #b7c492;
+}
+
+.wrapperMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: whitesmoke;
+}
+
+.wrapperPoll {
+  background: linear-gradient(var(--moss), var(--dark-moss2));
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--dark-moss2);
+  border-radius: 15px;
+  height: auto;
+  width: 20vw;
+  align-items: center;
+  padding: 15px 0px;
+  font-size: larger;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: -15px;
+}
+
+input {
+  margin-top: 10px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #000;
+  font-size: 14px;
+  background-color: var(--muted-chartreuse);
+  box-sizing: border-box;
+  outline: none;
+  height: 2rem;
+  width: 15rem;
+}
+
+input:focus {
+  box-shadow: 0 0 3px whitesmoke;
+}
+
+.submit {
+  height: 2rem;
+  width: 8rem;
+  border-radius: 5px;
+  border: 2px solid var(--dark-moss2);
+  outline: none;
+  background-color: var(--muted-chartreuse);
+}
+
+.submit:hover {
+  background-color: var(--muted-chartreuse2);
+}
+
+.submit:focus {
+  box-shadow: 0 0 3px whitesmoke;
+}

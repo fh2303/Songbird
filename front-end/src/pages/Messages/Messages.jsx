@@ -1,8 +1,9 @@
 import styles from "./Messages.module.css";
 import { socket } from "../../socket.js";
 import { useState } from "react";
+import RoomCreate from "../../components/RoomCreate/RoomCreate.jsx";
 
-function Messages() {
+function Messages({ events = [] }) {
   const [visible, setVisible] = useState(false);
 
   const roomName = "hi";
@@ -11,33 +12,38 @@ function Messages() {
     // setActiveRoom(roomName)
   }
 
-  function createRoom() {
-    <div className={styles.roomCreate}>{visible ? <></> : ""}</div>;
-  }
-
   return (
     <div className={styles.main}>
       <div className={styles.header}>
-        <button className={styles.add} onClick={() => createRoom()}>
+        <button
+          className={styles.add}
+          onClick={() => setVisible((val) => !val)}
+        >
           Add
         </button>
       </div>
-      <button className={styles.room} onClick={() => join(roomName)}>
-        Room
-      </button>
-      <button className={styles.room} onClick={() => join(roomName)}>
-        Room
-      </button>
-      <button className={styles.room} onClick={() => join(roomName)}>
-        Room
-      </button>
-      <button className={styles.room} onClick={() => join(roomName)}>
-        Room
-      </button>
-      <button className={styles.room} onClick={() => join(roomName)}>
-        Room
-      </button>
-      <div className={styles.filler}></div>
+
+      {visible ? (
+        <RoomCreate />
+      ) : (
+        <>
+          <div className={styles.roomList}>
+            <ul>
+              {events.map((event, index) => (
+                <li key={event._id || index} className={styles.roomItem}>
+                  <button
+                    className={styles.textContent}
+                    onClick={() => join(event.roomName)}
+                  >
+                    {event.content || "Unnamed"}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* <div className={styles.filler} /> */}
+        </>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn/SignIn.jsx";
 import Register from "./pages/Register/Register.jsx";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Messages from "./pages/Messages/Messages.jsx";
+import RoomCreate from "./components/RoomCreate/RoomCreate.jsx";
 
 function App() {
   return (
