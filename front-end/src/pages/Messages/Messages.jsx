@@ -11,7 +11,9 @@ function Messages() {
     // setActiveRoom(roomName)
   }
 
-  function createRoom() {}
+  function createRoom() {
+    <div className={styles.roomCreate}>{visible ? <></> : ""}</div>;
+  }
 
   return (
     <div className={styles.main}>
