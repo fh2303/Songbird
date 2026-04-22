@@ -7,12 +7,14 @@ import { Events } from "../../components/Events/Events.jsx";
 import { MyForm } from "../../components/MyForm/MyForm.jsx";
 import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
+import Messages from "../Messages/Messages.jsx";
 
 function GroupChat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
   const [visible, setVisible] = useState(false);
+  const [mainVisible, setMainVisible] = useState(true);
 
   useEffect(() => {
     function onConnect() {
@@ -44,11 +46,16 @@ function GroupChat() {
       });
     }
 
+    function onRoomJoin(newRoom) {
+      setMainVisible(false);
+    }
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("chat message", onChatMessage);
     socket.on("message deleted", onMessageDeleted);
     socket.on("sending proposal", onProposalSent);
+    socket.on("new room joined", onRoomJoin);
 
     return () => {
       socket.off("connect", onConnect);
@@ -56,30 +63,37 @@ function GroupChat() {
       socket.off("chat message", onChatMessage);
       socket.off("message deleted", onMessageDeleted);
       socket.off("sending proposal", onProposalSent);
+      socket.off("new room joined", onRoomJoin);
     };
   }, []);
 
   return (
-    <div className={styles.body}>
-      <div className={styles.messagesWrapper}>
-        <Events events={messages} />
-      </div>
-      <div className={styles.pollWrapper}>
-        {visible ? <ProposalForm></ProposalForm> : ""}
-      </div>
-      <div className={styles.wrapper}>
-        <ConnectionState isConnected={isConnected} />
-        <ConnectionManager />
-      </div>
-      <button
-        className={styles.submit}
-        type="button"
-        onClick={() => setVisible(!visible)}
-      >
-        Create Poll
-      </button>
-      <MyForm />
-    </div>
+    <>
+      {mainVisible ? (
+        <Messages></Messages>
+      ) : (
+        <div className={styles.body}>
+          <div className={styles.messagesWrapper}>
+            <Events events={messages} />
+          </div>
+          <div className={styles.pollWrapper}>
+            {visible ? <ProposalForm></ProposalForm> : ""}
+          </div>
+          <div className={styles.wrapper}>
+            <ConnectionState isConnected={isConnected} />
+            <ConnectionManager />
+          </div>
+          <button
+            className={styles.submit}
+            type="button"
+            onClick={() => setVisible(!visible)}
+          >
+            Create Poll
+          </button>
+          <MyForm />
+        </div>
+      )}
+    </>
   );
 }
 

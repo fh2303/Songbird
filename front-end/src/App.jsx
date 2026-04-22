@@ -22,7 +22,7 @@ function App() {
     //     <Route path="*" element={<Navigate to="/signin" />} />
     //   </Routes>
     // </BrowserRouter>
-    <Messages></Messages>
+    <GroupChat></GroupChat>
   );
 }
 

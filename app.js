@@ -99,6 +99,18 @@ io.on("connection", (socket) => {
       console.error("Can't delete", err);
     }
   });
+
+  socket.on("join room", (newRoom) => {
+    socket.rooms.forEach((room) => {
+      if (room !== socket.id) {
+        socket.leave(room);
+      }
+    });
+
+    socket.join(newRoom);
+    socket.emit("new room joined", newRoom);
+    console.log("user joined");
+  });
 });
 
 const PORT = process.env.PORT || 4000;
