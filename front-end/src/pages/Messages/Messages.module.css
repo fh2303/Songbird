@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.room {
+  height: 10vh;
+}
+
+.header {
+  height: 10vh;
+}
+
+.filler {
+  flex: 1;
+  background-color: whitesmoke;
+}
