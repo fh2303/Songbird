@@ -1,10 +1,11 @@
 import styles from "./Messages.module.css";
 import { socket } from "../../socket.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RoomCreate from "../../components/RoomCreate/RoomCreate.jsx";
 
-function Messages({ events = [] }) {
+function Messages() {
   const [visible, setVisible] = useState(false);
+  const [rooms, setRooms] = useState([]);
 
   const roomName = "hi";
   function join(roomName) {
@@ -12,14 +13,28 @@ function Messages({ events = [] }) {
     // setActiveRoom(roomName)
   }
 
+  useEffect(() => {
+    function onRoomsUpdate(newRoom) {
+      setRooms((prevRooms) => [...prevRooms, newRoom]);
+    }
+
+    socket.on("sending room", onRoomsUpdate);
+
+    return () => {
+      socket.off("sending room", onRoomsUpdate);
+    };
+  }, []);
+
   return (
     <div className={styles.main}>
       <div className={styles.header}>
         <button
           className={styles.add}
-          onClick={() => setVisible((val) => !val)}
+          onClick={() => {
+            setVisible((val) => !val);
+          }}
         >
-          Add
+          {visible ? "Back" : "Add"}
         </button>
       </div>
 
@@ -28,14 +43,14 @@ function Messages({ events = [] }) {
       ) : (
         <>
           <div className={styles.roomList}>
-            <ul>
-              {events.map((event, index) => (
-                <li key={event._id || index} className={styles.roomItem}>
+            <ul className={styles.list}>
+              {rooms.map((room, index) => (
+                <li key={room._id || index} className={styles.roomItem}>
                   <button
-                    className={styles.textContent}
-                    onClick={() => join(event.roomName)}
+                    className={styles.roomContent}
+                    onClick={() => join(room._id)}
                   >
-                    {event.content || "Unnamed"}
+                    {room.title || "Unnamed"}
                   </button>
                 </li>
               ))}

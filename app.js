@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import { Message } from "./db.js";
 import { Poll } from "./db.js";
 import { User } from "./db.js";
+import { Room } from "./db.js";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -83,7 +84,7 @@ io.on("connection", (socket) => {
 
   socket.on("posting proposal", async (poll) => {
     try {
-      console.log("Received");
+      // console.log("Received");
       const savedPoll = await Poll.create(poll);
       io.emit("sending proposal", savedPoll);
     } catch (err) {
@@ -110,6 +111,15 @@ io.on("connection", (socket) => {
     socket.join(newRoom);
     socket.emit("new room joined", newRoom);
     console.log("user joined");
+  });
+
+  socket.on("posting room", async (room) => {
+    try {
+      const savedRoom = await Room.create(room);
+      io.emit("sending room", savedRoom);
+    } catch (err) {
+      console.error("Can't send room", err);
+    }
   });
 });
 

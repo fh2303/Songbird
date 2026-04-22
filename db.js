@@ -36,6 +36,14 @@ const messageSchema = new Schema(
   { timestamps: true }
 );
 
+const roomSchema = new Schema(
+  {
+    title: { type: String },
+  },
+  { timestamps: true }
+);
+
 export const User = mongoose.model("User", userSchema);
 export const Poll = mongoose.model("Poll", pollSchema);
 export const Message = mongoose.model("Message", messageSchema);
+export const Room = mongoose.model("Room", roomSchema);
