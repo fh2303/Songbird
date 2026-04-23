@@ -1,11 +1,13 @@
 import styles from "./Messages.module.css";
 import { socket } from "../../socket.js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import RoomCreate from "../../components/RoomCreate/RoomCreate.jsx";
+import Header from "../../components/Header/Header.jsx";
+import { useNavigate } from "react-router-dom";
 
-function Messages({ currentUser }) {
+function Messages({ currentUser, rooms }) {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [rooms, setRooms] = useState([]);
 
   function join(roomName) {
     if (!currentUser) {
@@ -16,32 +18,12 @@ function Messages({ currentUser }) {
       newRoom: roomName,
       userId: currentUser._id,
     });
+    navigate("/groupchat", { state: { activeRoom: roomName } });
   }
-
-  useEffect(() => {
-    function onRoomsUpdate(newRoom) {
-      setRooms((prevRooms) => [...prevRooms, newRoom]);
-    }
-
-    socket.on("sending room", onRoomsUpdate);
-
-    return () => {
-      socket.off("sending room", onRoomsUpdate);
-    };
-  }, []);
 
   return (
     <div className={styles.main}>
-      <div className={styles.header}>
-        <button
-          className={styles.add}
-          onClick={() => {
-            setVisible((val) => !val);
-          }}
-        >
-          {visible ? "Back" : "Add"}
-        </button>
-      </div>
+      <Header onToggle={() => setVisible(!visible)} isVisible={visible} />
 
       {visible ? (
         <RoomCreate />
@@ -49,7 +31,7 @@ function Messages({ currentUser }) {
         <>
           <div className={styles.roomList}>
             <ul className={styles.list}>
-              {rooms.map((room, index) => (
+              {(rooms || []).map((room, index) => (
                 <li key={room._id || index} className={styles.roomItem}>
                   <button
                     className={styles.roomContent}

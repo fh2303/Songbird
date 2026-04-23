@@ -1,6 +1,6 @@
 import styles from "./GroupChat.module.css";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { socket } from "../../socket.js";
 import { ConnectionState } from "../../components/ConnectionState/ConnectionState.jsx";
 import { ConnectionManager } from "../../components/ConnectionManager/ConnectionManager.jsx";
@@ -9,20 +9,27 @@ import { MyForm } from "../../components/MyForm/MyForm.jsx";
 import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 import Messages from "../Messages/Messages.jsx";
+import Header from "../../components/Header/Header.jsx";
 
 function GroupChat({ currentUser }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialRoom = location.state?.activeRoom;
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
   const [visible, setVisible] = useState(false);
-  const [mainVisible, setMainVisible] = useState(true);
-  const [activeRoom, setActiveRoom] = useState(null);
+  const [mainVisible, setMainVisible] = useState(!initialRoom);
+  const [activeRoom, setActiveRoom] = useState(initialRoom);
 
   function propList() {
     navigate("/proplist");
   }
   useEffect(() => {
+    if (initialRoom) {
+      setActiveRoom(initialRoom);
+      setMainVisible(false);
+    }
     function onConnect() {
       setIsConnected(true);
     }
@@ -73,14 +80,15 @@ function GroupChat({ currentUser }) {
       socket.off("sending proposal", onProposalSent);
       socket.off("new room joined", onRoomJoin);
     };
-  }, []);
+  }, [initialRoom]);
 
   return (
     <>
       {mainVisible ? (
-        <Messages currentUser={currentUser} />
+        <Messages currentUser={currentUser} propList={propList} />
       ) : (
         <div className={styles.body}>
+          <Header showButton={false} />
           <div className={styles.messagesWrapper}>
             <Events events={messages} />
           </div>
@@ -100,12 +108,9 @@ function GroupChat({ currentUser }) {
             type="button"
             onClick={() => setVisible(!visible)}
           >
-            Create Poll
+            {!visible ? "Create Poll" : "Cancel Poll"}
           </button>
           <MyForm activeRoom={activeRoom} />
-          <button className={styles.submit} onClick={() => propList()}>
-            Go to proplist
-          </button>
         </div>
       )}
     </>
