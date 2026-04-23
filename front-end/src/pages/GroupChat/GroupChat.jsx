@@ -52,9 +52,9 @@ function GroupChat({ currentUser }) {
 
     function onProposalSent(proposal) {
       setMessages((prevMessages) => {
-        if (prevMessages.some((m) => m._id === proposal._id))
+        if (prevMessages.some((m) => m._id === proposal._id)) {
           return prevMessages;
-
+        }
         return [...prevMessages, { ...proposal, type: "proposal" }];
       });
     }

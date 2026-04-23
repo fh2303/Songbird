@@ -25,15 +25,28 @@ function App() {
 
   useEffect(() => {
     if (user?._id) {
-      fetch(`/api/rooms?userId=${user._id}`)
-        .then((res) => res.json())
-        .then((data) => setRooms(data))
-        .catch((err) => console.error("Error loading rooms:", err));
+      fetch(`/api/rooms?userId=${user._id}`, { credentials: "include" })
+        .then((res) => {
+          if (!res.ok) throw new Error("Unauthorized");
+          return res.json();
+        })
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setRooms(data);
+          } else {
+            setRooms([]);
+          }
+        })
+        .catch((err) => {
+          setRooms([]);
+        });
     }
 
     function onRoomsUpdate(newRoom) {
       setRooms((prev) => {
-        if (prev.some((room) => room._id === newRoom._id)) return prev;
+        if (prev.some((room) => room._id === newRoom._id)) {
+          return prev;
+        }
         return [...prev, newRoom];
       });
     }

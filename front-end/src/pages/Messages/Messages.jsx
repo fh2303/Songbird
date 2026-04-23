@@ -11,7 +11,7 @@ function Messages({ currentUser, rooms }) {
 
   function join(roomName) {
     if (!currentUser) {
-      console.log("No user");
+      // console.log("No user");
       return;
     }
     socket.emit("join room", {
