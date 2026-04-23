@@ -42,11 +42,11 @@ Click on each proposal to expand it and see the information from the proposal. C
 
 ## First link to github line number(s) for constructor, HOF, etc.
 
-[(TODO: add link to line number(s) here)](https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/4e6665bbf8678a956800b2443f5662d9b0d2cd2d/app.js#L39)
+https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/4e6665bbf8678a956800b2443f5662d9b0d2cd2d/app.js#L39
 
 ## Second link to github line number(s) for constructor, HOF, etc.
 
-[(TODO: add link to line number(s) here)](https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/4e6665bbf8678a956800b2443f5662d9b0d2cd2d/app.js#L143-L151)
+https://github.com/nyu-csci-ua-0467-001-002-spring-26/final-project-fh2303/blob/4e6665bbf8678a956800b2443f5662d9b0d2cd2d/app.js#L143-L151
 
 ## Short description for links above
 
