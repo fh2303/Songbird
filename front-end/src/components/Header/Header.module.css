@@ -1,0 +1,33 @@
+.header {
+  flex-shrink: 0;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  z-index: 1000;
+  padding: 10px 0px 0px 0px;
+  top: 0;
+  background-color: #2e3b2e;
+  width: 100%;
+  gap: 15px;
+}
+
+.submit {
+  position: relative;
+  z-index: 10;
+  margin-bottom: 10px;
+  height: 29px;
+  background-color: var(--muted-chartreuse2);
+  border-radius: 5px;
+  border: 1px solid var(--moss);
+}
+
+.submit:hover {
+  background-color: var(--muted-chartreuse);
+}
+
+.submit:focus {
+  background-color: var(--muted-chartreuse);
+  outline: none;
+}
