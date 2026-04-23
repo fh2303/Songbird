@@ -1,5 +1,6 @@
 import styles from "./GroupChat.module.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { socket } from "../../socket.js";
 import { ConnectionState } from "../../components/ConnectionState/ConnectionState.jsx";
 import { ConnectionManager } from "../../components/ConnectionManager/ConnectionManager.jsx";
@@ -10,6 +11,7 @@ import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 import Messages from "../Messages/Messages.jsx";
 
 function GroupChat({ currentUser }) {
+  const navigate = useNavigate();
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
@@ -17,6 +19,9 @@ function GroupChat({ currentUser }) {
   const [mainVisible, setMainVisible] = useState(true);
   const [activeRoom, setActiveRoom] = useState(null);
 
+  function propList() {
+    navigate("/proplist");
+  }
   useEffect(() => {
     function onConnect() {
       setIsConnected(true);
@@ -80,7 +85,11 @@ function GroupChat({ currentUser }) {
             <Events events={messages} />
           </div>
           <div className={styles.pollWrapper}>
-            {visible ? <ProposalForm></ProposalForm> : ""}
+            {visible ? (
+              <ProposalForm activeRoom={activeRoom}></ProposalForm>
+            ) : (
+              ""
+            )}
           </div>
           <div className={styles.wrapper}>
             <ConnectionState isConnected={isConnected} />
@@ -94,6 +103,9 @@ function GroupChat({ currentUser }) {
             Create Poll
           </button>
           <MyForm activeRoom={activeRoom} />
+          <button className={styles.submit} onClick={() => propList()}>
+            Go to proplist
+          </button>
         </div>
       )}
     </>

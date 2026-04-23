@@ -2,9 +2,8 @@ import styles from "./ProposalPost.module.css";
 import { useState, useEffect } from "react";
 
 function ProposalPost({ proposal }) {
-  const {
-    eventDetails: { title, locationName, time, details },
-  } = proposal || {};
+  const eventDetails = proposal?.eventDetails || {};
+  const { title, locationName, time, details } = eventDetails;
 
   function handleExpand() {
     console.log("hello");

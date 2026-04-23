@@ -1,10 +1,41 @@
 import styles from "./ProposalList.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProposalPost from "../../components/Proposal/ProposalPost";
+import { socket } from "../../socket";
 
-function ProposalList() {
+function ProposalList({ currentUser }) {
   const [proposals, setProposals] = useState([]);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser?._id) {
+      return;
+    }
+
+    const grabPolls = async () => {
+      try {
+        const response = await fetch(
+          `/api/roomPolls?userId=${currentUser._id}`
+        );
+        const data = await response.json();
+        setProposals(data);
+      } catch (err) {
+        console.error("Fetch error", err);
+      }
+    };
+
+    grabPolls();
+
+    function onProposalSent(proposal) {
+      setProposals((prev) => [proposal, ...prev]);
+    }
+
+    socket.on("sending proposal", onProposalSent);
+
+    return () => {
+      socket.off("sending proposal", onProposalSent);
+    };
+  }, [currentUser]);
 
   return (
     <div className={styles.main}>
@@ -13,17 +44,8 @@ function ProposalList() {
       </div>
       <div className={styles.listWrapper}>
         <ul className={styles.list}>
-          {proposals.map((prop, index) => (
-            <li key={prop._id || index} className={styles.propItem}>
-              {visible ? (
-                <ProposalPost />
-              ) : (
-                <button
-                  className={styles.propContent}
-                  onClick={() => setVisible(true)}
-                ></button>
-              )}
-            </li>
+          {proposals.map((prop) => (
+            <ProposalItem key={prop._id} poll={prop} />
           ))}
         </ul>
       </div>
@@ -31,4 +53,23 @@ function ProposalList() {
   );
 }
 
+function ProposalItem({ poll }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (isOpen) {
+    return (
+      <div className={styles.expandedWrapper} onClick={() => setIsOpen(false)}>
+        <ProposalPost proposal={poll} />
+        <p className={styles.clickToClose}>Click to collapse</p>
+      </div>
+    );
+  }
+
+  return (
+    <button className={styles.previewButton} onClick={() => setIsOpen(true)}>
+      <strong>{poll.eventDetails?.title}</strong>
+      <span className={styles.roomTag}> in {poll.room?.title}</span>
+    </button>
+  );
+}
 export default ProposalList;

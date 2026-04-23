@@ -18,12 +18,12 @@ app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  }),
-);
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL || "http://localhost:5173",
+//     credentials: true,
+//   }),
+// );
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
@@ -61,6 +61,30 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.get("/api/roomPolls", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ error: "no userId" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
+      "room",
+      "title"
+    );
+
+    res.json(polls);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.get("/*path", (req, res) => {
   if (req.path.startsWith("/api")) {
     return res.status(404).json({ message: "Not found" });
@@ -91,8 +115,11 @@ io.on("connection", (socket) => {
   socket.on("posting proposal", async (poll) => {
     try {
       // console.log("Received");
-      const savedPoll = await Poll.create(poll);
-      io.emit("sending proposal", savedPoll);
+      const savedPoll = await Poll.create({
+        eventDetails: poll.eventDetails,
+        room: poll.room,
+      });
+      io.to(poll.room).emit("sending proposal", savedPoll);
     } catch (err) {
       console.log("Cant post proposal", err);
     }

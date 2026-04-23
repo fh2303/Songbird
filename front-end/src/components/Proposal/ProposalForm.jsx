@@ -2,7 +2,7 @@ import { socket } from "../../socket.js";
 import styles from "./ProposalForm.module.css";
 import { useState } from "react";
 
-function ProposalForm() {
+function ProposalForm({ activeRoom }) {
   const [pollData, setPollData] = useState({
     eventDetails: { title: "", locationName: "", time: "", details: "" },
   });
@@ -20,7 +20,10 @@ function ProposalForm() {
 
   function onSubmit(event) {
     event.preventDefault();
-    socket.emit("posting proposal", pollData);
+    socket.emit("posting proposal", {
+      eventDetails: pollData.eventDetails,
+      room: activeRoom,
+    });
   }
 
   return (

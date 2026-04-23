@@ -8,6 +8,10 @@ function Messages({ currentUser }) {
   const [rooms, setRooms] = useState([]);
 
   function join(roomName) {
+    if (!currentUser) {
+      console.log("No user");
+      return;
+    }
     socket.emit("join room", {
       newRoom: roomName,
       userId: currentUser._id,
