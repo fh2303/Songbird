@@ -1,0 +1,56 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+/* .room {
+  height: 10vh;
+} */
+
+.header {
+  flex-shrink: 0;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* .filler {
+  flex: 1;
+  background-color: whitesmoke;
+} */
+
+.add {
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+.roomItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.roomContent {
+  font-size: 16px;
+  color: black;
+  flex-grow: 1;
+  word-break: break-word;
+  white-space: normal;
+  height: 10vh;
+}
+
+.roomList {
+  background-color: whitesmoke;
+  flex: 1;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+}

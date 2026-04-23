@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import { Message } from "./db.js";
 import { Poll } from "./db.js";
 import { User } from "./db.js";
+import { Room } from "./db.js";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -17,12 +18,12 @@ app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
-// app.use(
-//   cors({
-//     origin: process.env.CLIENT_URL || "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
@@ -48,7 +49,10 @@ app.post("/api/login", async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && user.password === password) {
-      res.json({ success: true });
+      res.json({
+        success: true,
+        user: { _id: user._id, username: user.username },
+      });
     } else {
       res.status(401).json({ success: false, message: "Invalid credentials" });
     }
@@ -74,8 +78,11 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   socket.on("chat message", async (msg) => {
     try {
-      const savedMsg = await Message.create({ content: msg });
-      io.emit("chat message", savedMsg);
+      const savedMsg = await Message.create({
+        content: msg.content,
+        room: msg.room,
+      });
+      io.to(msg.room).emit("chat message", savedMsg);
     } catch (err) {
       console.error("Mongo went wrong", err);
     }
@@ -83,7 +90,7 @@ io.on("connection", (socket) => {
 
   socket.on("posting proposal", async (poll) => {
     try {
-      console.log("Received");
+      // console.log("Received");
       const savedPoll = await Poll.create(poll);
       io.emit("sending proposal", savedPoll);
     } catch (err) {
@@ -97,6 +104,36 @@ io.on("connection", (socket) => {
       io.emit("message deleted", id);
     } catch (err) {
       console.error("Can't delete", err);
+    }
+  });
+
+  socket.on("join room", async ({ newRoom, userId }) => {
+    socket.rooms.forEach((room) => {
+      if (room !== socket.id) {
+        socket.leave(room);
+      }
+    });
+
+    socket.join(newRoom);
+
+    try {
+      const updatedUser = await User.findByIdAndUpdate(userId, {
+        $addToSet: { rooms: newRoom },
+      });
+      console.log(`${updatedUser.username} is now a member of ${newRoom}`);
+    } catch (error) {
+      console.error("DB Error:", error);
+    }
+    socket.emit("new room joined", newRoom);
+    console.log("user joined");
+  });
+
+  socket.on("posting room", async (room) => {
+    try {
+      const savedRoom = await Room.create(room);
+      io.emit("sending room", savedRoom);
+    } catch (err) {
+      console.error("Can't send room", err);
     }
   });
 });

@@ -9,8 +9,9 @@ const userSchema = new Schema(
     email: { type: String, required: true, lowercase: true },
     password: { type: String, required: true },
     polls: [Schema.Types.ObjectId],
+    rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const pollSchema = new Schema(
@@ -22,10 +23,11 @@ const pollSchema = new Schema(
       time: String,
       details: String,
     },
+    roomId: { type: Schema.Types.ObjectId, required: true },
     // votes: { type: Number, default: 0 },
     // voters: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const messageSchema = new Schema(
@@ -33,9 +35,17 @@ const messageSchema = new Schema(
     content: { type: String, required: true },
     sender: { type: String, default: "Anonymous" },
   },
-  { timestamps: true }
+  { timestamps: true },
+);
+
+const roomSchema = new Schema(
+  {
+    title: { type: String },
+  },
+  { timestamps: true },
 );
 
 export const User = mongoose.model("User", userSchema);
 export const Poll = mongoose.model("Poll", pollSchema);
 export const Message = mongoose.model("Message", messageSchema);
+export const Room = mongoose.model("Room", roomSchema);
