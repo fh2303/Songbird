@@ -7,16 +7,11 @@ function Messages({ currentUser }) {
   const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
 
-  const roomName = "hi";
   function join(roomName) {
-    socket.emit("join room", roomName);
-    // setActiveRoom(roomName)
-    if (currentUser?._id) {
-      socket.emit("button clicked", {
-        targetUserId: currentUser._id,
-        roomId: roomName,
-      });
-    }
+    socket.emit("join room", {
+      newRoom: roomName,
+      userId: currentUser._id,
+    });
   }
 
   useEffect(() => {

@@ -9,12 +9,13 @@ import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 import Messages from "../Messages/Messages.jsx";
 
-function GroupChat() {
+function GroupChat({ currentUser }) {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
   const [visible, setVisible] = useState(false);
   const [mainVisible, setMainVisible] = useState(true);
+  const [activeRoom, setActiveRoom] = useState(null);
 
   useEffect(() => {
     function onConnect() {
@@ -48,6 +49,8 @@ function GroupChat() {
 
     function onRoomJoin(newRoom) {
       setMainVisible(false);
+      setActiveRoom(newRoom);
+      setMessages([]);
     }
 
     socket.on("connect", onConnect);
@@ -70,7 +73,7 @@ function GroupChat() {
   return (
     <>
       {mainVisible ? (
-        <Messages></Messages>
+        <Messages currentUser={currentUser} />
       ) : (
         <div className={styles.body}>
           <div className={styles.messagesWrapper}>
@@ -90,7 +93,7 @@ function GroupChat() {
           >
             Create Poll
           </button>
-          <MyForm />
+          <MyForm activeRoom={activeRoom} />
         </div>
       )}
     </>

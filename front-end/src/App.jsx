@@ -11,19 +11,20 @@ import Messages from "./pages/Messages/Messages.jsx";
 import RoomCreate from "./components/RoomCreate/RoomCreate.jsx";
 
 function App() {
+  const [user, setUser] = useState(null);
+
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Navigate to="/signin" />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/signin" />} />
+        <Route path="/signin" element={<SignIn userLogin={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/groupchat" element={<GroupChat currentUser={user} />} />
+        <Route path="/messages" element={<Messages />} />
 
-    //     <Route path="/signin" element={<SignIn />} />
-    //     <Route path="/register" element={<Register />} />
-    //     <Route path="/groupchat" element={<GroupChat />} />
-
-    //     <Route path="*" element={<Navigate to="/signin" />} />
-    //   </Routes>
-    // </BrowserRouter>
-    <GroupChat></GroupChat>
+        <Route path="*" element={<Navigate to="/signin" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

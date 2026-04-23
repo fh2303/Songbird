@@ -18,12 +18,12 @@ app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
 
-// app.use(
-//   cors({
-//     origin: process.env.CLIENT_URL || "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
@@ -78,8 +78,11 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   socket.on("chat message", async (msg) => {
     try {
-      const savedMsg = await Message.create({ content: msg });
-      io.emit("chat message", savedMsg);
+      const savedMsg = await Message.create({
+        content: msg.content,
+        room: msg.room,
+      });
+      io.to(msg.room).emit("chat message", savedMsg);
     } catch (err) {
       console.error("Mongo went wrong", err);
     }
@@ -89,7 +92,6 @@ io.on("connection", (socket) => {
     try {
       // console.log("Received");
       const savedPoll = await Poll.create(poll);
-      const newId = new mongoose.Types.ObjectId();
       io.emit("sending proposal", savedPoll);
     } catch (err) {
       console.log("Cant post proposal", err);
@@ -105,7 +107,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("join room", (newRoom) => {
+  socket.on("join room", async ({ newRoom, userId }) => {
     socket.rooms.forEach((room) => {
       if (room !== socket.id) {
         socket.leave(room);
@@ -113,6 +115,15 @@ io.on("connection", (socket) => {
     });
 
     socket.join(newRoom);
+
+    try {
+      const updatedUser = await User.findByIdAndUpdate(userId, {
+        $addToSet: { rooms: newRoom },
+      });
+      console.log(`${updatedUser.username} is now a member of ${newRoom}`);
+    } catch (error) {
+      console.error("DB Error:", error);
+    }
     socket.emit("new room joined", newRoom);
     console.log("user joined");
   });
@@ -123,26 +134,6 @@ io.on("connection", (socket) => {
       io.emit("sending room", savedRoom);
     } catch (err) {
       console.error("Can't send room", err);
-    }
-  });
-
-  socket.on("button clicked", async (data) => {
-    try {
-      const { targetUserId, room } = data;
-
-      const updatedUser = await User.findByIdAndUpdate(
-        targetUserId,
-        { $addToSet: { rooms: room } },
-        { new: true },
-      );
-
-      if (updatedUser) {
-        console.log(`Added room ${roomId} to user ${updatedUser.username}`);
-      } else {
-        console.log("User not found");
-      }
-    } catch (error) {
-      console.error("DB error", error);
     }
   });
 });

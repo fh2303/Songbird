@@ -2,7 +2,7 @@ import styles from "../loginPages.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function SignIn() {
+function SignIn({ userLogin }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
@@ -22,6 +22,7 @@ function SignIn() {
       const data = await response.json();
 
       if (data.success) {
+        userLogin(data.user);
         navigate("/groupchat");
       } else {
         setError("Invalid sign in");

@@ -2,12 +2,15 @@ import { socket } from "../../socket.js";
 import { useState } from "react";
 import styles from "./MyForm.module.css";
 
-export function MyForm() {
+export function MyForm({ activeRoom }) {
   const [value, setValue] = useState("");
 
   function onSubmit(event) {
     event.preventDefault();
-    socket.emit("chat message", value);
+    socket.emit("chat message", {
+      content: value,
+      room: activeRoom,
+    });
     setValue("");
   }
 
