@@ -23,7 +23,7 @@ const pollSchema = new Schema(
       time: String,
       details: String,
     },
-    roomId: { type: String, required: true },
+    roomId: { type: Schema.Types.ObjectId, required: true },
     // votes: { type: Number, default: 0 },
     // voters: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
