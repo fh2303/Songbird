@@ -39,7 +39,7 @@ function GroupChat({ currentUser }) {
     }
 
     function onChatMessage(value) {
-      setMessages((previous = []) => [...previous, value]);
+      setMessages((prev) => [...(prev || []), value]);
       window.scrollTo(0, document.body.scrollHeight);
     }
 
@@ -61,8 +61,12 @@ function GroupChat({ currentUser }) {
 
     function onRoomJoin(newRoom) {
       setMainVisible(false);
-      setActiveRoom(newRoom);
-      setMessages([]);
+      setActiveRoom((prevRoom) => {
+        if (prevRoom !== newRoom) {
+          setMessages([]);
+        }
+        return newRoom;
+      });
     }
 
     socket.on("connect", onConnect);

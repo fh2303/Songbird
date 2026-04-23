@@ -2,6 +2,7 @@ import styles from "./ProposalList.module.css";
 import { useState, useEffect } from "react";
 import ProposalPost from "../../components/Proposal/ProposalPost";
 import { socket } from "../../socket";
+import Header from "../../components/Header/Header";
 
 function ProposalList({ currentUser }) {
   const [proposals, setProposals] = useState([]);
@@ -39,13 +40,13 @@ function ProposalList({ currentUser }) {
 
   return (
     <div className={styles.main}>
-      <div className={styles.header}>
-        <p className={styles.header2}>Hello</p>
-      </div>
+      <Header showButton={false} />
       <div className={styles.listWrapper}>
         <ul className={styles.list}>
           {proposals.map((prop) => (
-            <ProposalItem key={prop._id} poll={prop} />
+            <li key={prop._id} className={styles.listItem}>
+              <ProposalItem poll={prop} />
+            </li>
           ))}
         </ul>
       </div>
@@ -58,7 +59,7 @@ function ProposalItem({ poll }) {
 
   if (isOpen) {
     return (
-      <div className={styles.expandedWrapper} onClick={() => setIsOpen(false)}>
+      <div className={styles.expanded} onClick={() => setIsOpen(false)}>
         <ProposalPost proposal={poll} />
         <p className={styles.clickToClose}>Click to collapse</p>
       </div>

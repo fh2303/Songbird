@@ -85,6 +85,21 @@ app.get("/api/roomPolls", async (req, res) => {
   }
 });
 
+app.get("/api/rooms", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) return res.status(400).json({ error: "userId not found" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const rooms = await Room.find({ _id: { $in: user.rooms } });
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.get("/*path", (req, res) => {
   if (req.path.startsWith("/api")) {
     return res.status(404).json({ message: "Not found" });
@@ -155,10 +170,13 @@ io.on("connection", (socket) => {
     console.log("user joined");
   });
 
-  socket.on("posting room", async (room) => {
+  socket.on("posting room", async ({ room, userId }) => {
     try {
       const savedRoom = await Room.create(room);
-      io.emit("sending room", savedRoom);
+      await User.findByIdAndUpdate(userId, {
+        $addToSet: { rooms: savedRoom._id },
+      });
+      socket.emit("sending room", savedRoom);
     } catch (err) {
       console.error("Can't send room", err);
     }

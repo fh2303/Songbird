@@ -26,7 +26,7 @@ function Messages({ currentUser, rooms }) {
       <Header onToggle={() => setVisible(!visible)} isVisible={visible} />
 
       {visible ? (
-        <RoomCreate />
+        <RoomCreate currentUser={currentUser} />
       ) : (
         <>
           <div className={styles.roomList}>

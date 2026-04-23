@@ -17,11 +17,17 @@
 .listWrapper {
   background-color: whitesmoke;
   flex: 1;
+  padding: 24px;
+  overflow-y: auto;
 }
 
 .list {
   padding: 0;
   margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .main {
@@ -31,11 +37,38 @@
   width: 100%;
 }
 
-.header {
-  flex-shrink: 0;
-  height: 10vh;
+.expanded {
+  background-color: white;
+  border: 1px solid #2e3b2e;
+  box-shadow: 4px 4px var(--muted-chartreuse);
+  border-radius: 4px;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.previewButton {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: left;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.roomTag {
+  font-size: 0.8rem;
+  color: #757575;
+  font-family: monospace;
+}
+
+.clickToClose {
+  text-align: center;
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 15px;
+  text-transform: uppercase;
 }

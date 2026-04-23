@@ -24,12 +24,22 @@ function App() {
   };
 
   useEffect(() => {
+    if (user?._id) {
+      fetch(`/api/rooms?userId=${user._id}`)
+        .then((res) => res.json())
+        .then((data) => setRooms(data))
+        .catch((err) => console.error("Error loading rooms:", err));
+    }
+
     function onRoomsUpdate(newRoom) {
-      setRooms((prev) => [...prev, newRoom]);
+      setRooms((prev) => {
+        if (prev.some((room) => room._id === newRoom._id)) return prev;
+        return [...prev, newRoom];
+      });
     }
     socket.on("sending room", onRoomsUpdate);
     return () => socket.off("sending room", onRoomsUpdate);
-  }, []);
+  }, [user]);
 
   return (
     <BrowserRouter>

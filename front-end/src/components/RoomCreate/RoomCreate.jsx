@@ -2,7 +2,7 @@ import styles from "./RoomCreate.module.css";
 import { socket } from "../../socket.js";
 import { useState } from "react";
 
-function RoomCreate() {
+function RoomCreate({ currentUser }) {
   const [roomData, setRoomData] = useState({ title: "" });
 
   function handleChange(event) {
@@ -12,7 +12,11 @@ function RoomCreate() {
 
   function onSubmit(event) {
     event.preventDefault();
-    socket.emit("posting room", roomData);
+    socket.emit("posting room", {
+      room: roomData,
+      userId: currentUser?._id,
+    });
+
     setRoomData({ title: "" });
   }
 
