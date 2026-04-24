@@ -3,7 +3,8 @@ import { socket } from "../../socket.js";
 import { useState } from "react";
 
 function RoomCreate({ currentUser }) {
-  const [roomData, setRoomData] = useState({ title: "" });
+  const [roomData, setRoomData] = useState({ title: "", members: [] });
+  const [email, setEmail] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -12,12 +13,27 @@ function RoomCreate({ currentUser }) {
 
   function onSubmit(event) {
     event.preventDefault();
+    if (email.trim()) {
+      addMember(event);
+      return;
+    }
+
     socket.emit("posting room", {
       room: roomData,
       userId: currentUser?._id,
     });
 
-    setRoomData({ title: "" });
+    setRoomData({ title: "", members: [] });
+  }
+
+  function addMember(e) {
+    if (email.trim()) {
+      setRoomData((prev) => ({
+        ...prev,
+        members: [...prev.members, email.trim()],
+      }));
+      setEmail("");
+    }
   }
 
   return (
@@ -32,9 +48,15 @@ function RoomCreate({ currentUser }) {
             onChange={handleChange}
             placeholder="Chat Name:"
           />
-          {/* something to add people */}
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Invite user by email:"
+          />
+
           <button className={styles.submit} type="submit">
-            Add
+            {email.trim() ? "Add Member" : "Create Room"}
           </button>
         </form>
       </div>

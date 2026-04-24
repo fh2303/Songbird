@@ -25,6 +25,7 @@ function App() {
 
   useEffect(() => {
     if (user?._id) {
+      socket.emit("register user", user._id);
       fetch(`/api/rooms?userId=${user._id}`, { credentials: "include" })
         .then((res) => {
           if (!res.ok) throw new Error("Unauthorized");

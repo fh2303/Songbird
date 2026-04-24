@@ -30,7 +30,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.DSN }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -67,8 +67,8 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    }
-  )
+    },
+  ),
 );
 
 const ensureAuth = (req, res, next) => {
@@ -78,12 +78,12 @@ const ensureAuth = (req, res, next) => {
   res.status(401).json({ message: "Unauthorized" });
 };
 
-// app.use(
-//   cors({
-//     origin: process.env.CLIENT_URL || "http://localhost:5173",
-//     credentials: true,
-//   }),
-// );
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
@@ -130,7 +130,7 @@ app.get("/api/roomPolls", async (req, res) => {
 
     const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
       "room",
-      "title"
+      "title",
     );
 
     res.json(polls);
@@ -161,10 +161,16 @@ const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
+  socket.on("register user", (userId) => {
+    if (userId) {
+      socket.join(userId.toString());
+    }
+  });
   socket.on("chat message", async (msg) => {
     try {
       const savedMsg = await Message.create({
@@ -223,12 +229,26 @@ io.on("connection", (socket) => {
   socket.on("posting room", async ({ room, userId }) => {
     try {
       const savedRoom = await Room.create(room);
-      await User.findByIdAndUpdate(userId, {
-        $addToSet: { rooms: savedRoom._id },
-      });
+      const invitedEmails = room.members || [];
+
+      await User.updateMany(
+        {
+          $or: [{ _id: userId }, { email: { $in: invitedEmails } }],
+        },
+        { $addToSet: { rooms: savedRoom._id } },
+      );
+
       socket.emit("sending room", savedRoom);
+
+      const membersToNotify = await User.find(
+        { email: { $in: invitedEmails } },
+        "_id",
+      );
+      membersToNotify.forEach((member) => {
+        io.to(member._id.toString()).emit("sending room", savedRoom);
+      });
     } catch (err) {
-      console.error("Can't send room", err);
+      console.error("Can't create or share room:", err);
     }
   });
 });

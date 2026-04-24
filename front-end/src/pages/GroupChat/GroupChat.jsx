@@ -103,10 +103,10 @@ function GroupChat({ currentUser }) {
               ""
             )}
           </div>
-          <div className={styles.wrapper}>
+          {/* <div className={styles.wrapper}>
             <ConnectionState isConnected={isConnected} />
             <ConnectionManager />
-          </div>
+          </div> */}
           <button
             className={styles.submit}
             type="button"
