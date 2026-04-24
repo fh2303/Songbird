@@ -18,11 +18,11 @@ https://final-project-fh2303.onrender.com/
 
 ## URL for form 1 (from previous milestone)
 
-[(TODO: add link to a functioning form)](https://final-project-fh2303.onrender.com/messages)
+https://final-project-fh2303.onrender.com/messages
 
 ## Special Instructions for Form 1
 
-Click add room to open a form where you can input a title for a chat room. You can click back to cancel or after you press add. Click "Go to proplist" to see a list of proposals from the rooms you are currently a part of.
+Click add room to open a form where you can input a title for a chat room and if you'd like, emails for users you want to add. You can click back to cancel or after you press add. Click both the add user and create room buttons to make the chat. Click "Go to proplist" to see a list of proposals from the rooms you are currently a part of.
 
 ## URL for form 2 (for current milestone)
 
