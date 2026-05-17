@@ -23,7 +23,7 @@ function SignIn({ userLogin }) {
 
       if (data.success) {
         userLogin(data.user);
-        navigate("/groupchat");
+        navigate("/messages");
       } else {
         setError("Invalid sign in");
       }

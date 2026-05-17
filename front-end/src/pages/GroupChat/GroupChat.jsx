@@ -1,5 +1,6 @@
 import styles from "./GroupChat.module.css";
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { socket } from "../../socket.js";
 import { ConnectionState } from "../../components/ConnectionState/ConnectionState.jsx";
 import { ConnectionManager } from "../../components/ConnectionManager/ConnectionManager.jsx";
@@ -8,16 +9,27 @@ import { MyForm } from "../../components/MyForm/MyForm.jsx";
 import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 import Messages from "../Messages/Messages.jsx";
+import Header from "../../components/Header/Header.jsx";
 
 function GroupChat({ currentUser }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const initialRoom = location.state?.activeRoom;
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
   const [visible, setVisible] = useState(false);
-  const [mainVisible, setMainVisible] = useState(true);
-  const [activeRoom, setActiveRoom] = useState(null);
+  const [mainVisible, setMainVisible] = useState(!initialRoom);
+  const [activeRoom, setActiveRoom] = useState(initialRoom);
 
+  function propList() {
+    navigate("/proplist");
+  }
   useEffect(() => {
+    if (initialRoom) {
+      setActiveRoom(initialRoom);
+      setMainVisible(false);
+    }
     function onConnect() {
       setIsConnected(true);
     }
@@ -27,7 +39,7 @@ function GroupChat({ currentUser }) {
     }
 
     function onChatMessage(value) {
-      setMessages((previous = []) => [...previous, value]);
+      setMessages((prev) => [...(prev || []), value]);
       window.scrollTo(0, document.body.scrollHeight);
     }
 
@@ -40,17 +52,21 @@ function GroupChat({ currentUser }) {
 
     function onProposalSent(proposal) {
       setMessages((prevMessages) => {
-        if (prevMessages.some((m) => m._id === proposal._id))
+        if (prevMessages.some((m) => m._id === proposal._id)) {
           return prevMessages;
-
+        }
         return [...prevMessages, { ...proposal, type: "proposal" }];
       });
     }
 
     function onRoomJoin(newRoom) {
       setMainVisible(false);
-      setActiveRoom(newRoom);
-      setMessages([]);
+      setActiveRoom((prevRoom) => {
+        if (prevRoom !== newRoom) {
+          setMessages([]);
+        }
+        return newRoom;
+      });
     }
 
     socket.on("connect", onConnect);
@@ -68,30 +84,35 @@ function GroupChat({ currentUser }) {
       socket.off("sending proposal", onProposalSent);
       socket.off("new room joined", onRoomJoin);
     };
-  }, []);
+  }, [initialRoom]);
 
   return (
     <>
       {mainVisible ? (
-        <Messages currentUser={currentUser} />
+        <Messages currentUser={currentUser} propList={propList} />
       ) : (
         <div className={styles.body}>
+          <Header showButton={false} />
           <div className={styles.messagesWrapper}>
             <Events events={messages} />
           </div>
           <div className={styles.pollWrapper}>
-            {visible ? <ProposalForm></ProposalForm> : ""}
+            {visible ? (
+              <ProposalForm activeRoom={activeRoom}></ProposalForm>
+            ) : (
+              ""
+            )}
           </div>
-          <div className={styles.wrapper}>
+          {/* <div className={styles.wrapper}>
             <ConnectionState isConnected={isConnected} />
             <ConnectionManager />
-          </div>
+          </div> */}
           <button
             className={styles.submit}
             type="button"
             onClick={() => setVisible(!visible)}
           >
-            Create Poll
+            {!visible ? "Create Poll" : "Cancel Poll"}
           </button>
           <MyForm activeRoom={activeRoom} />
         </div>

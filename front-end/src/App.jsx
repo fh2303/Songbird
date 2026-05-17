@@ -12,32 +12,89 @@ import RoomCreate from "./components/RoomCreate/RoomCreate.jsx";
 import ProposalList from "./pages/ProposalList/ProposalList.jsx";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [proposals, setProposals] = useState([]);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [rooms, setRooms] = useState([]);
 
-  useEffect(()=>{
+  const handleLogin = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
 
-    function proposalSent(proposal){
-      
+  useEffect(() => {
+    if (user?._id) {
+      socket.emit("register user", user._id);
+      fetch(`/api/rooms?userId=${user._id}`, { credentials: "include" })
+        .then((res) => {
+          if (!res.ok) throw new Error("Unauthorized");
+          return res.json();
+        })
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setRooms(data);
+          } else {
+            setRooms([]);
+          }
+        })
+        .catch((err) => {
+          setRooms([]);
+        });
     }
 
-
-    socket.on("sending proposal", proposalSent)
-  })
+    function onRoomsUpdate(newRoom) {
+      setRooms((prev) => {
+        if (prev.some((room) => room._id === newRoom._id)) {
+          return prev;
+        }
+        return [...prev, newRoom];
+      });
+    }
+    socket.on("sending room", onRoomsUpdate);
+    return () => socket.off("sending room", onRoomsUpdate);
+  }, [user]);
 
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Navigate to="/signin" />} />
-    //     <Route path="/signin" element={<SignIn userLogin={setUser} />} />
-    //     <Route path="/register" element={<Register />} />
-    //     <Route path="/groupchat" element={<GroupChat currentUser={user} />} />
-    //     <Route path="/messages" element={<Messages />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/signin" />} />
+        <Route path="/signin" element={<SignIn userLogin={handleLogin} />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/groupchat"
+          element={
+            user ? (
+              <GroupChat currentUser={user} />
+            ) : (
+              <Navigate to="/signin" replace />
+            )
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            user ? (
+              <Messages currentUser={user} rooms={rooms} />
+            ) : (
+              <Navigate to="/signin" />
+            )
+          }
+        />
+        <Route
+          path="/proplist"
+          element={
+            user ? (
+              <ProposalList currentUser={user} />
+            ) : (
+              <Navigate to="/signin" replace />
+            )
+          }
+        />
 
-    //     <Route path="*" element={<Navigate to="/signin" />} />
-    //   </Routes>
-    // </BrowserRouter>
-    <ProposalList></ProposalList>
+        <Route path="*" element={<Navigate to="/signin" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

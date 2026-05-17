@@ -10,6 +10,11 @@ import { Room } from "./db.js";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+import MongoStore from "connect-mongo";
+import session from "express-session";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcrypt";
 
 const app = express();
 const server = createServer(app);
@@ -17,6 +22,61 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
 mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "this is secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.DSN }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return done(null, false);
+    }
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+passport.use(
+  new LocalStrategy(
+    { usernameField: "email" },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          return done(null, false, { message: "Incorrect email." });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return done(null, false, { message: "Incorrect password." });
+        }
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    },
+  ),
+);
+
+const ensureAuth = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ message: "Unauthorized" });
+};
 
 app.use(
   cors({
@@ -31,33 +91,62 @@ app.post("/api/register", async (req, res) => {
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
-    if (existingUser)
+    if (existingUser) {
       return res
         .status(400)
         .json({ success: false, message: "Email already being used" });
+    }
 
-    const newUser = await User.create({ email, password, username: email });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      username: email,
+    });
     res.status(201).json({ success: true });
   } catch (err) {
     res.status(500).json({ success: false });
   }
 });
 
-app.post("/api/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+app.post("/api/login", passport.authenticate("local"), async (req, res) => {
+  res.json({
+    success: true,
+    user: { _id: req.user._id, username: req.user.username },
+  });
+});
 
-    if (user && user.password === password) {
-      res.json({
-        success: true,
-        user: { _id: user._id, username: user.username },
-      });
-    } else {
-      res.status(401).json({ success: false, message: "Invalid credentials" });
+app.get("/api/roomPolls", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ error: "no userId" });
     }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
+      "room",
+      "title",
+    );
+
+    res.json(polls);
   } catch (err) {
-    res.status(500).json({ success: false });
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.get("/api/rooms", ensureAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const rooms = await Room.find({ _id: { $in: user.rooms } });
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -72,10 +161,16 @@ const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
+  socket.on("register user", (userId) => {
+    if (userId) {
+      socket.join(userId.toString());
+    }
+  });
   socket.on("chat message", async (msg) => {
     try {
       const savedMsg = await Message.create({
@@ -91,10 +186,13 @@ io.on("connection", (socket) => {
   socket.on("posting proposal", async (poll) => {
     try {
       // console.log("Received");
-      const savedPoll = await Poll.create(poll);
-      io.emit("sending proposal", savedPoll);
+      const savedPoll = await Poll.create({
+        eventDetails: poll.eventDetails,
+        room: poll.room,
+      });
+      io.to(poll.room).emit("sending proposal", savedPoll);
     } catch (err) {
-      console.log("Cant post proposal", err);
+      console.error("Cant post proposal", err);
     }
   });
 
@@ -120,20 +218,37 @@ io.on("connection", (socket) => {
       const updatedUser = await User.findByIdAndUpdate(userId, {
         $addToSet: { rooms: newRoom },
       });
-      console.log(`${updatedUser.username} is now a member of ${newRoom}`);
+      // console.log(`${updatedUser.username} is now a member of ${newRoom}`);
     } catch (error) {
       console.error("DB Error:", error);
     }
     socket.emit("new room joined", newRoom);
-    console.log("user joined");
+    // console.log("user joined");
   });
 
-  socket.on("posting room", async (room) => {
+  socket.on("posting room", async ({ room, userId }) => {
     try {
       const savedRoom = await Room.create(room);
-      io.emit("sending room", savedRoom);
+      const invitedEmails = room.members || [];
+
+      await User.updateMany(
+        {
+          $or: [{ _id: userId }, { email: { $in: invitedEmails } }],
+        },
+        { $addToSet: { rooms: savedRoom._id } },
+      );
+
+      socket.emit("sending room", savedRoom);
+
+      const membersToNotify = await User.find(
+        { email: { $in: invitedEmails } },
+        "_id",
+      );
+      membersToNotify.forEach((member) => {
+        io.to(member._id.toString()).emit("sending room", savedRoom);
+      });
     } catch (err) {
-      console.error("Can't send room", err);
+      console.error("Can't create or share room:", err);
     }
   });
 });
