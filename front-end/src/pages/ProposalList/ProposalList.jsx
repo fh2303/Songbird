@@ -2,8 +2,7 @@ import styles from "./ProposalList.module.css";
 import { useState } from "react";
 import ProposalPost from "../../components/Proposal/ProposalPost";
 
-function ProposalList() {
-  const [proposals, setProposals] = useState([]);
+function ProposalList({proposals}) {
   const [visible, setVisible] = useState(false);
 
   return (

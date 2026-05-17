@@ -15,7 +15,15 @@ function App() {
   const [user, setUser] = useState(null);
   const [proposals, setProposals] = useState([]);
 
-  useEffect(() => {});
+  useEffect(()=>{
+
+    function proposalSent(proposal){
+      
+    }
+
+
+    socket.on("sending proposal", proposalSent)
+  })
 
   return (
     // <BrowserRouter>
