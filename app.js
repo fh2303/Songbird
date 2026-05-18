@@ -203,9 +203,7 @@ io.on("connection", (socket) => {
         socket.leave(room);
       }
     });
-
     socket.join(newRoom);
-
     try {
       const updatedUser = await User.findByIdAndUpdate(userId, {
         $addToSet: { rooms: newRoom },
