@@ -16,7 +16,7 @@ function ProposalList({ currentUser }) {
     const grabPolls = async () => {
       try {
         const response = await fetch(
-          `/api/roomPolls?userId=${currentUser._id}`
+          `/api/roomPolls?userId=${currentUser._id}`,
         );
         const data = await response.json();
         setProposals(data);

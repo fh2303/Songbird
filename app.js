@@ -80,7 +80,8 @@ const ensureAuth = (req, res, next) => {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    // origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -116,18 +117,9 @@ app.post("/api/login", passport.authenticate("local"), async (req, res) => {
   });
 });
 
-app.get("/api/roomPolls", async (req, res) => {
+app.get("/api/roomPolls", ensureAuth, async (req, res) => {
   try {
-    const { userId } = req.query;
-    if (!userId) {
-      return res.status(400).json({ error: "no userId" });
-    }
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
+    const user = req.user;
     const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
       "room",
       "title",
@@ -142,7 +134,7 @@ app.get("/api/roomPolls", async (req, res) => {
 
 app.get("/api/rooms", ensureAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = req.user;
     const rooms = await Room.find({ _id: { $in: user.rooms } });
     res.json(rooms);
   } catch (err) {
@@ -159,7 +151,7 @@ app.get("/*path", (req, res) => {
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -196,10 +188,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("delete message", async (id) => {
+  socket.on("delete message", async (data) => {
     try {
-      await Message.findByIdAndDelete(id);
-      io.emit("message deleted", id);
+      await Message.findByIdAndDelete(data.id);
+      io.to(data.room).emit("message deleted", data.id);
     } catch (err) {
       console.error("Can't delete", err);
     }
