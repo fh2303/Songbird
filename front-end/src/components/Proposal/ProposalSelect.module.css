@@ -1,0 +1,50 @@
+.select {
+  display: flex;
+  flex-direction: column;
+  appearance: none;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: #8fa055;
+
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  bottom: 50%;
+  left: -5px;
+}
+/* .select {
+  transition: opacity 0.2s, transform 0.2s;
+} */
+.hangout,
+.study {
+  color: var(--dark-moss2);
+  background-color: transparent;
+  border: none;
+  border-radius: 2px;
+  padding: 20px;
+}
+
+.hangout:hover,
+.study:hover {
+  background-color: #5c751b;
+}
+
+.hr {
+  border: none;
+  height: 2px;
+  background-color: #000;
+  width: 100%;
+  margin: 0;
+}
+
+@keyframes fade {
+  100% {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(5%) translateY(-18%);
+  }
+}
+
+.animate {
+  animation: fade 0.1s ease-in forwards;
+}

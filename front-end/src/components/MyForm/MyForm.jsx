@@ -2,7 +2,7 @@ import { socket } from "../../socket.js";
 import { useState } from "react";
 import styles from "./MyForm.module.css";
 
-export function MyForm({ activeRoom }) {
+export function MyForm({ activeRoom, onHover, visible }) {
   const [value, setValue] = useState("");
 
   function onSubmit(event) {
@@ -14,15 +14,19 @@ export function MyForm({ activeRoom }) {
     setValue("");
   }
 
-  function onClick(event) {
-    // event.preventDefault();
-  }
-
   return (
     <>
       <form className={styles.form} onSubmit={onSubmit}>
         <div className={styles.plus}>
-          <button className={styles.add}>+</button>
+          <button
+            className={styles.add}
+            type="button"
+            // onMouseEnter={() => onHover(true)}
+            // onMouseLeave={() => onHover(false)}
+            onClick={() => onHover(!visible)}
+          >
+            +
+          </button>
           <input
             className={styles.input}
             value={value}

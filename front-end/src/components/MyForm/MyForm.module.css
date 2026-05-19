@@ -51,4 +51,9 @@
   position: absolute;
   align-self: center;
   margin-left: 15px;
+  background-color: var(--muted-chartreuse2);
+  border: 0.5px solid var(--dark-moss);
+  border-radius: 3px;
+
+  /* padding: 5px; */
 }

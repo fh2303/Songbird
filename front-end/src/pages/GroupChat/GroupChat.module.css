@@ -5,7 +5,7 @@
   align-items: center;
   min-height: 100vh;
   position: relative;
-  background-color: white;
+  background-color: var(--bg);
   box-sizing: border-box;
   margin: 0;
   font-family: monospace;
@@ -32,6 +32,7 @@
   position: absolute;
   z-index: 10;
   /* height: fit-content; */
+  /* opacity: 0; */
 }
 
 .submit {
@@ -51,4 +52,28 @@
 .submit:focus {
   background-color: var(--muted-chartreuse);
   outline: none;
+}
+
+/* .pollSelect {
+  appearance: none;
+  position: absolute;
+  pointer-events: none;
+  padding: 10px;
+  top: 900px;
+  left: 540px;
+  opacity: 0;
+} */
+
+.popUp {
+  position: relative;
+}
+
+/* .stylesWrapper {
+  position: absolute;
+  top: 300px;
+} */
+
+.anchor {
+  display: inline-block;
+  position: relative;
 }

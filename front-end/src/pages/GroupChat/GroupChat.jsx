@@ -10,6 +10,24 @@ import ProposalForm from "../../components/Proposal/ProposalForm.jsx";
 import ProposalPost from "../../components/Proposal/ProposalPost.jsx";
 import Messages from "../Messages/Messages.jsx";
 import Header from "../../components/Header/Header.jsx";
+import ProposalSelect from "../../components/Proposal/ProposalSelect.jsx";
+
+// function Animation() {
+//   const cssAni = `
+//       @keyframes fade{
+//         100% {
+//           opacity: 1;
+//           pointer-events: auto;
+//           transform: translateX(100%) translateY(-200%);
+//         }
+//       }
+
+//       .${styles.pollSelect} {
+//         animation: fade 0.2s ease-in forwards;
+//       }
+//     `;
+//   return <style>{cssAni}</style>;
+// }
 
 function GroupChat({ currentUser }) {
   const navigate = useNavigate();
@@ -19,12 +37,22 @@ function GroupChat({ currentUser }) {
   const [messages, setMessages] = useState([]);
   const [poll, setPoll] = useState({});
   const [visible, setVisible] = useState(false);
+  const [selectVisible, setSelectVisible] = useState(false);
   const [mainVisible, setMainVisible] = useState(!initialRoom);
   const [activeRoom, setActiveRoom] = useState(initialRoom);
 
   function propList() {
     navigate("/proplist");
   }
+  function handleHover(status) {
+    // event.preventDefault();
+    setSelectVisible(status);
+  }
+
+  function handleFirst(status) {
+    setVisible(status);
+  }
+
   useEffect(() => {
     if (initialRoom) {
       setActiveRoom(initialRoom);
@@ -96,25 +124,36 @@ function GroupChat({ currentUser }) {
           <div className={styles.messagesWrapper}>
             <Events events={messages} />
           </div>
-          <div className={styles.pollWrapper}>
-            {visible ? (
+          {visible ? (
+            <div className={styles.pollWrapper}>
               <ProposalForm activeRoom={activeRoom}></ProposalForm>
-            ) : (
-              ""
-            )}
-          </div>
+            </div>
+          ) : (
+            ""
+          )}
           {/* <div className={styles.wrapper}>
             <ConnectionState isConnected={isConnected} />
             <ConnectionManager />
           </div> */}
-          <button
+          {/* <button
             className={styles.submit}
             type="button"
             onClick={() => setVisible(!visible)}
           >
             {!visible ? "Create Poll" : "Cancel Poll"}
-          </button>
-          <MyForm activeRoom={activeRoom} />
+          </button> */}
+          <div className={styles.anchor}>
+            <MyForm
+              activeRoom={activeRoom}
+              onHover={handleHover}
+              visible={selectVisible}
+            />
+            <ProposalSelect
+              className={selectVisible ? "animate" : ""}
+              visible={visible}
+              handleFirst={handleFirst}
+            />
+          </div>
         </div>
       )}
     </>
