@@ -4,13 +4,14 @@
   width: 100%;
   max-width: 800px;
   padding-top: 20px;
-  border-top: 2px solid black;
+  /* border-top: 2px solid black; */
 }
 
 .input {
   width: 42vw;
-  height: 2rem;
-  margin-bottom: 30px;
+  height: 3.5rem;
+  margin: 0;
+  padding-left: 40px;
 }
 
 .input:hover {
@@ -39,4 +40,15 @@
 .button:focus {
   background-color: var(--muted-chartreuse);
   outline: none;
+}
+
+.plus {
+  display: flex;
+  position: relative;
+}
+
+.add {
+  position: absolute;
+  align-self: center;
+  margin-left: 15px;
 }

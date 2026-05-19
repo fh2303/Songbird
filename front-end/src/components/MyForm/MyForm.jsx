@@ -14,17 +14,25 @@ export function MyForm({ activeRoom }) {
     setValue("");
   }
 
+  function onClick(event) {
+    // event.preventDefault();
+  }
+
   return (
     <>
       <form className={styles.form} onSubmit={onSubmit}>
-        <input
-          className={styles.input}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <button className={styles.button} type="submit">
+        <div className={styles.plus}>
+          <button className={styles.add}>+</button>
+          <input
+            className={styles.input}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </div>
+
+        {/* <button className={styles.button} type="submit">
           Submit
-        </button>
+        </button> */}
       </form>
     </>
   );
