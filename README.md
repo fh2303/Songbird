@@ -2,7 +2,7 @@ The content below is an example project proposal / requirements document. Replac
 
 (**\_TODO**: your project name\_)
 
-# Huddle
+# Songbird
 
 ## Overview
 
@@ -10,7 +10,7 @@ The content below is an example project proposal / requirements document. Replac
 
 Growing up, it was easier to hang out with friends, once everyone finished homework or sports, you could quickly follow through with plans. Now that everyone's grown up, it's harder to schedule hang outs due to obligations or other blocking factors.
 
-Huddle is a solution to that problem: it will allow everyone in a group chat to post polls that clearly state the details of a hang out such as idea, time, location. The current time we live in is quite fast paced, and any friction when planning could likely lead to abandoned plans. By streamlining the hang out experience as much as possible, Huddle hopes to promote more fun times with friends.
+Songbird is a solution to that problem: it will allow everyone in a group chat to post polls that clearly state the details of a hang out such as idea, time, location. The current time we live in is quite fast paced, and any friction when planning could likely lead to abandoned plans. By streamlining the hang out experience as much as possible, Songbird hopes to promote more fun times with friends.
 
 ## Data Model
 
