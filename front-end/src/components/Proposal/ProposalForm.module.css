@@ -1,14 +1,10 @@
-:root {
-  --dark-moss2: #1c1e14;
-  --dark-moss: #3d4820;
-  --moss: #5f6f29;
-  --muted-chartreuse2: #a1b06b;
-  --muted-chartreuse: #b7c492;
-}
-
 .title {
+  /* margin: 0;
+  padding-bottom: 30px; */
   margin: 0;
-  padding-bottom: 30px;
+  padding: 0;
+  color: var(--muted-chartreuse);
+  margin-bottom: 1rem;
 }
 
 .wrapperMain {
@@ -16,66 +12,69 @@
   justify-content: center;
   align-items: center;
   /* height: 100vh; */
+  height: fit-content;
+  width: 100%;
 }
 
 .wrapperPoll {
-  background: linear-gradient(var(--moss), var(--dark-moss2));
-  color: whitesmoke;
+  /* background: linear-gradient(var(--moss), var(--dark-moss), var(--dark-moss2)); */
+  color: aliceblue;
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--dark-moss2);
-  border-radius: 15px;
+  border: 2px solid var(--muted-chartreuse);
+  border-radius: 100px 10px;
+  box-shadow: 0 0 4px whitesmoke;
   height: auto;
-  width: 20vw;
+  width: 100%;
+  max-width: 16rem;
   align-items: center;
-  padding: 15px 0px;
+  padding: 1rem 2rem 2rem 2rem;
   font-size: larger;
+  animation: diagonalReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1.2) forwards;
 }
 
 .inputWrapper {
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
   gap: 1rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   height: 100%;
-  margin-top: -15px;
+  width: 100%;
 }
 
-input {
+.input {
   border-radius: 5px;
   width: 100%;
   padding: 12px;
-  border: 2px solid #000;
+  border: 2px solid var(--muted-chartreuse2);
   font-size: 14px;
   background-color: var(--muted-chartreuse);
   box-sizing: border-box;
   outline: none;
-  height: 2rem;
-  width: 15rem;
 }
 
 textarea {
   border-radius: 5px;
   width: 100%;
   padding: 12px;
-  border: 2px solid #000;
+  border: 2px solid var(--muted-chartreuse2);
   font-size: 14px;
   background-color: var(--muted-chartreuse);
   box-sizing: border-box;
   outline: none;
   resize: none;
-  height: 5rem;
-  width: 15rem;
+  min-height: 5rem;
 }
 
 .submit {
   height: 2rem;
   width: 8rem;
   border-radius: 5px;
-  border: 2px solid var(--dark-moss2);
+  border: 2px solid var(--muted-chartreuse);
   outline: none;
   background-color: var(--muted-chartreuse);
+  cursor: pointer;
 }
 
 .submit:hover {
@@ -83,7 +82,7 @@ textarea {
 }
 
 input:focus {
-  box-shadow: 0 0 3px whitesmoke;
+  box-shadow: 0 0 4px rgb(184, 184, 184);
 }
 
 textarea:focus {
@@ -92,4 +91,19 @@ textarea:focus {
 
 .submit:focus {
   box-shadow: 0 0 3px whitesmoke;
+}
+
+@keyframes diagonalReveal {
+  0% {
+    clip-path: polygon(0 100%, 0 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@media (max-width: 400px) {
+  h2 {
+    font-size: 1.5rem; /* Downsize the font so it fits neatly! */
+  }
 }

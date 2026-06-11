@@ -2,7 +2,7 @@ import { socket } from "../../socket.js";
 import { useState } from "react";
 import styles from "./MyForm.module.css";
 
-export function MyForm({ activeRoom, onHover, visible }) {
+export function MyForm({ activeRoom, onHover, visible, currentUser }) {
   const [value, setValue] = useState("");
 
   function onSubmit(event) {
@@ -10,6 +10,7 @@ export function MyForm({ activeRoom, onHover, visible }) {
     socket.emit("chat message", {
       content: value,
       room: activeRoom,
+      userId: currentUser._id,
     });
     setValue("");
   }

@@ -29,9 +29,10 @@ function ProposalForm({ activeRoom }) {
   return (
     <div className={styles.wrapperMain}>
       <div className={styles.wrapperPoll}>
-        <p className={styles.title}>Proposal</p>
+        <h2 className={styles.title}>Cadenza</h2>
         <form onSubmit={onSubmit} className={styles.inputWrapper}>
           <input
+            className={styles.input}
             name="title"
             value={pollData.eventDetails.title}
             onChange={handleData}
@@ -39,6 +40,7 @@ function ProposalForm({ activeRoom }) {
             placeholder="Idea:"
           />
           <input
+            className={styles.input}
             name="locationName"
             value={pollData.eventDetails.locationName}
             onChange={handleData}
@@ -46,6 +48,7 @@ function ProposalForm({ activeRoom }) {
             placeholder="Location:"
           />
           <input
+            className={styles.input}
             name="time"
             value={pollData.eventDetails.time}
             onChange={handleData}

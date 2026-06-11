@@ -8,7 +8,7 @@ function ProposalSelect({ className, visible, handleFirst }) {
       }`}
     >
       <button className={styles.hangout} onClick={() => handleFirst(!visible)}>
-        Hangout
+        Cadenza
       </button>
       <hr className={styles.hr} />
       <button className={styles.study}>Study</button>

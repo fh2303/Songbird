@@ -24,6 +24,7 @@ function RoomCreate({ currentUser }) {
     });
 
     setRoomData({ title: "", members: [] });
+    setEmail("");
   }
 
   function addMember(e) {
@@ -47,6 +48,7 @@ function RoomCreate({ currentUser }) {
             value={roomData.title}
             onChange={handleChange}
             placeholder="Chat Name:"
+            required
           />
           <input
             type="email"
@@ -54,9 +56,15 @@ function RoomCreate({ currentUser }) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Invite user by email:"
           />
-
+          <button
+            type="button"
+            onClick={addMember}
+            className={styles.addButton}
+          >
+            + Add
+          </button>
           <button className={styles.submit} type="submit">
-            {email.trim() ? "Add Member" : "Create Room"}
+            Create Room
           </button>
         </form>
       </div>

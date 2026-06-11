@@ -40,6 +40,11 @@ const messageSchema = new Schema(
     content: { type: String, required: true },
     sender: { type: String, default: "Anonymous" },
     room: { type: String, required: true, index: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
