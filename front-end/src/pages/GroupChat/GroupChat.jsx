@@ -147,6 +147,7 @@ function GroupChat({ currentUser }) {
               activeRoom={activeRoom}
               onHover={handleHover}
               visible={selectVisible}
+              currentUser={currentUser}
             />
             <ProposalSelect
               className={selectVisible ? "animate" : ""}

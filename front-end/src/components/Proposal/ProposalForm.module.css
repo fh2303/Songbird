@@ -3,8 +3,8 @@
   padding-bottom: 30px; */
   margin: 0;
   padding: 0;
-  color: #d7ee99;
-  margin-bottom: 1.5rem;
+  color: var(--muted-chartreuse);
+  margin-bottom: 1rem;
 }
 
 .wrapperMain {
@@ -12,12 +12,12 @@
   justify-content: center;
   align-items: center;
   /* height: 100vh; */
-  height: 100vh;
+  height: fit-content;
   width: 100%;
 }
 
 .wrapperPoll {
-  background: linear-gradient(var(--moss), var(--dark-moss), var(--dark-moss2));
+  /* background: linear-gradient(var(--moss), var(--dark-moss), var(--dark-moss2)); */
   color: aliceblue;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
   align-items: center;
   padding: 1rem 2rem 2rem 2rem;
   font-size: larger;
-  animation: diagonalReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: diagonalReveal 0.7s cubic-bezier(0.25, 1, 0.5, 1.2) forwards;
 }
 
 .inputWrapper {
@@ -71,7 +71,7 @@ textarea {
   height: 2rem;
   width: 8rem;
   border-radius: 5px;
-  border: 2px solid var(--dark-moss2);
+  border: 2px solid var(--muted-chartreuse);
   outline: none;
   background-color: var(--muted-chartreuse);
   cursor: pointer;

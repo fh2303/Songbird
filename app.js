@@ -30,7 +30,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.DSN }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  }),
+  })
 );
 
 app.use(passport.initialize());
@@ -67,8 +67,8 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    },
-  ),
+    }
+  )
 );
 
 const ensureAuth = (req, res, next) => {
@@ -82,7 +82,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 
@@ -130,7 +130,7 @@ app.get("/api/roomPolls", async (req, res) => {
 
     const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
       "room",
-      "title",
+      "title"
     );
 
     res.json(polls);
@@ -176,8 +176,10 @@ io.on("connection", (socket) => {
       const savedMsg = await Message.create({
         content: msg.content,
         room: msg.room,
+        user: msg.userId,
       });
-      io.to(msg.room).emit("chat message", savedMsg);
+      const populatedMsg = await savedMsg.populate("user", "username");
+      io.to(msg.room).emit("chat message", populatedMsg);
     } catch (err) {
       console.error("Mongo went wrong", err);
     }
@@ -235,14 +237,14 @@ io.on("connection", (socket) => {
         {
           $or: [{ _id: userId }, { email: { $in: invitedEmails } }],
         },
-        { $addToSet: { rooms: savedRoom._id } },
+        { $addToSet: { rooms: savedRoom._id } }
       );
 
       socket.emit("sending room", savedRoom);
 
       const membersToNotify = await User.find(
         { email: { $in: invitedEmails } },
-        "_id",
+        "_id"
       );
       membersToNotify.forEach((member) => {
         io.to(member._id.toString()).emit("sending room", savedRoom);

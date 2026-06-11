@@ -6,20 +6,25 @@ export function Events({ events }) {
   return (
     <ul className={styles.messages}>
       {events.map((event, index) => (
-        <li key={event._id || index} className={styles.messageItem}>
-          {event.type === "proposal" ? (
-            <ProposalPost proposal={event} />
-          ) : (
-            <span className={styles.textContent}>
-              {event.content || "Empty"}
-            </span>
-          )}
-          <button
-            onClick={() => socket.emit("delete message", event._id)}
-            className={styles.button}
-          >
-            Delete
-          </button>
+        <li key={event._id || index}>
+          <strong className={styles.sender}>
+            {event.user?.username || "Anonymous"}
+          </strong>
+          <div className={styles.messageItem}>
+            {event.type === "proposal" ? (
+              <ProposalPost proposal={event} />
+            ) : (
+              <span className={styles.textContent}>
+                {event.content || "Empty"}
+              </span>
+            )}
+            <button
+              onClick={() => socket.emit("delete message", event._id)}
+              className={styles.button}
+            >
+              Delete
+            </button>
+          </div>
         </li>
       ))}
     </ul>
