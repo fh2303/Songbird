@@ -198,8 +198,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join room", async ({ newRoom, userId }) => {
+    if (!userId) return;
     socket.rooms.forEach((room) => {
-      if (room !== socket.id) {
+      if (room !== socket.id && room !== userId.toString()) {
         socket.leave(room);
       }
     });
