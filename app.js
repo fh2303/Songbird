@@ -7,7 +7,7 @@ import { Message } from "./db.js";
 import { Poll } from "./db.js";
 import { User } from "./db.js";
 import { Room } from "./db.js";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 import MongoStore from "connect-mongo";
@@ -154,13 +154,28 @@ app.get("/api/messages/:roomId", ensureAuth, async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    const messages = await Message.find({ room: roomId })
-      .populate("user", "username email")
-      .sort({ createdAt: -1 })
-      .limit(50)
-      .lean();
+    const roomObjId = new mongoose.Types.ObjectId(roomId);
+    const timeline = await Message.aggregate([
+      { $match: { room: roomId } },
+      { $addFields: { type: "message" } },
+      {
+        $unionWith: {
+          coll: "polls",
+          pipeline: [
+            { $match: { room: roomObjId } },
+            { $addFields: { type: "proposal" } },
+          ],
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      { $limit: 50 },
+    ]);
 
-    res.json(messages.reverse());
+    const userTimeline = await Message.populate(timeline, {
+      path: "user",
+      select: "username email",
+    });
+    res.json(userTimeline.reverse());
   } catch (err) {
     console.error("Cant fetch msgs", err);
     res.status(500).json({ error: "Server error" });
@@ -219,7 +234,11 @@ io.on("connection", (socket) => {
 
   socket.on("delete message", async (data) => {
     try {
-      await Message.findByIdAndDelete(data.id);
+      if (data.type === "message") {
+        await Message.findByIdAndDelete(data.id);
+      } else {
+        await Poll.findByIdAndDelete(data.id);
+      }
       io.to(data.room).emit("message deleted", data.id);
     } catch (err) {
       console.error("Can't delete", err);

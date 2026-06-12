@@ -23,6 +23,7 @@ export function Events({ events }) {
                 socket.emit("delete message", {
                   id: event._id,
                   room: event.room,
+                  type: event.type,
                 })
               }
               className={styles.button}
