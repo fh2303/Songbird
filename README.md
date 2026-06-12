@@ -1,12 +1,6 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "**TODO**" with details specific to your project. Remove the "TODO" lines.
-
-(**\_TODO**: your project name\_)
-
 # Songbird
 
 ## Overview
-
-(**\_TODO**: a brief one or two paragraph, high-level description of your project\_)
 
 Growing up, it was easier to hang out with friends, once everyone finished homework or sports, you could quickly follow through with plans. Now that everyone's grown up, it's harder to schedule hang outs due to obligations or other blocking factors.
 
@@ -14,15 +8,11 @@ Songbird is a solution to that problem: it will allow everyone in a group chat t
 
 ## Data Model
 
-(**\_TODO**: a description of your application's data and their relationships to each other\_)
-
 The application will store Users, Polls and User Locations
 
 - users can have multiple polls (references)
 - each poll can have multiple details and options (embedding)
 - user locations can be tracked for everyone in a hangout to see
-
-(**\_TODO**: sample documents\_)
 
 An Example User:
 

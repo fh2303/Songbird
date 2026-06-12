@@ -10,7 +10,7 @@ export function MyForm({ activeRoom, onHover, visible, currentUser }) {
     socket.emit("chat message", {
       content: value,
       room: activeRoom,
-      userId: currentUser._id,
+      userId: currentUser?._id || currentUser?.id,
     });
     setValue("");
   }

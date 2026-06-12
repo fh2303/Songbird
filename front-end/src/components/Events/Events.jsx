@@ -8,7 +8,7 @@ export function Events({ events }) {
       {events.map((event, index) => (
         <li key={event._id || index}>
           <strong className={styles.sender}>
-            {event.user?.username || "Anonymous"}
+            {event.user?.username || event.sender || "Anonymous"}
           </strong>
           <div className={styles.messageItem}>
             {event.type === "proposal" ? (
@@ -19,7 +19,12 @@ export function Events({ events }) {
               </span>
             )}
             <button
-              onClick={() => socket.emit("delete message", event._id)}
+              onClick={() =>
+                socket.emit("delete message", {
+                  id: event._id,
+                  room: event.room,
+                })
+              }
               className={styles.button}
             >
               Delete

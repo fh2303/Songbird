@@ -87,7 +87,7 @@ function GroupChat({ currentUser }) {
       });
     }
 
-    function onRoomJoin(newRoom) {
+    async function onRoomJoin(newRoom) {
       setMainVisible(false);
       setActiveRoom((prevRoom) => {
         if (prevRoom !== newRoom) {
@@ -95,6 +95,24 @@ function GroupChat({ currentUser }) {
         }
         return newRoom;
       });
+
+      try {
+        const response = await fetch(`/api/messages/${newRoom}`, {
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+          const history = await response.json();
+          setMessages(history);
+          setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 50);
+        } else {
+          console.error("Failed to fetch chat history");
+        }
+      } catch (err) {
+        console.error("Network error fetching chat history:", err);
+      }
     }
 
     socket.on("connect", onConnect);
@@ -112,8 +130,24 @@ function GroupChat({ currentUser }) {
       socket.off("sending proposal", onProposalSent);
       socket.off("new room joined", onRoomJoin);
     };
-  }, [initialRoom]);
+  }, [initialRoom, activeRoom]);
 
+  useEffect(() => {
+    if (initialRoom) {
+      const fetchInitialHistory = async () => {
+        try {
+          const response = await fetch(`/api/messages/${initialRoom}`);
+          if (response.ok) {
+            const data = await response.json();
+            setMessages(data);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchInitialHistory();
+    }
+  }, [initialRoom]);
   return (
     <>
       {mainVisible ? (
@@ -126,7 +160,10 @@ function GroupChat({ currentUser }) {
           </div>
           {visible ? (
             <div className={styles.pollWrapper}>
-              <ProposalForm activeRoom={activeRoom}></ProposalForm>
+              <ProposalForm
+                activeRoom={activeRoom}
+                currentUser={currentUser}
+              ></ProposalForm>
             </div>
           ) : (
             ""

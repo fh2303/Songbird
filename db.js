@@ -11,7 +11,7 @@ const userSchema = new Schema(
     polls: [Schema.Types.ObjectId],
     rooms: [{ type: Schema.Types.ObjectId, ref: "Room" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const pollSchema = new Schema(
@@ -29,10 +29,15 @@ const pollSchema = new Schema(
       index: true,
       ref: "Room",
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     // votes: { type: Number, default: 0 },
     // voters: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const messageSchema = new Schema(
@@ -46,14 +51,14 @@ const messageSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const roomSchema = new Schema(
   {
     title: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const User = mongoose.model("User", userSchema);

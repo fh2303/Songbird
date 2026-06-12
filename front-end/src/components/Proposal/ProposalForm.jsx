@@ -2,7 +2,7 @@ import { socket } from "../../socket.js";
 import styles from "./ProposalForm.module.css";
 import { useState } from "react";
 
-function ProposalForm({ activeRoom }) {
+function ProposalForm({ activeRoom, currentUser }) {
   const [pollData, setPollData] = useState({
     eventDetails: { title: "", locationName: "", time: "", details: "" },
   });
@@ -23,6 +23,7 @@ function ProposalForm({ activeRoom }) {
     socket.emit("posting proposal", {
       eventDetails: pollData.eventDetails,
       room: activeRoom,
+      userId: currentUser?._id || currentUser?.id,
     });
   }
 

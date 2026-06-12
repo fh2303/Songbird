@@ -21,7 +21,10 @@ const server = createServer(app);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(express.static(path.join(__dirname, "/front-end/dist")));
 
-mongoose.connect(process.env.DSN).then(() => console.log("Connected to db"));
+mongoose.connect(process.env.DSN).then(async () => {
+  console.log("Connected to db");
+  // const clean = await Message.deleteMany({});
+});
 
 app.use(
   session({
@@ -30,7 +33,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.DSN }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -67,8 +70,8 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    }
-  )
+    },
+  ),
 );
 
 const ensureAuth = (req, res, next) => {
@@ -83,7 +86,7 @@ app.use(
     // origin: process.env.CLIENT_URL || "http://localhost:5173",
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 
@@ -122,7 +125,7 @@ app.get("/api/roomPolls", ensureAuth, async (req, res) => {
     const user = req.user;
     const polls = await Poll.find({ room: { $in: user.rooms } }).populate(
       "room",
-      "title"
+      "title",
     );
 
     res.json(polls);
@@ -138,6 +141,28 @@ app.get("/api/rooms", ensureAuth, async (req, res) => {
     const rooms = await Room.find({ _id: { $in: user.rooms } });
     res.json(rooms);
   } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.get("/api/messages/:roomId", ensureAuth, async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const user = req.user;
+
+    if (!user.rooms.includes(roomId)) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const messages = await Message.find({ room: roomId })
+      .populate("user", "username email")
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean();
+
+    res.json(messages.reverse());
+  } catch (err) {
+    console.error("Cant fetch msgs", err);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -170,8 +195,8 @@ io.on("connection", (socket) => {
         room: msg.room,
         user: msg.userId,
       });
-      const populatedMsg = await savedMsg.populate("user", "username");
-      io.to(msg.room).emit("chat message", populatedMsg);
+      await savedMsg.populate("user", "username email");
+      io.to(msg.room).emit("chat message", savedMsg);
     } catch (err) {
       console.error("Mongo went wrong", err);
     }
@@ -183,7 +208,9 @@ io.on("connection", (socket) => {
       const savedPoll = await Poll.create({
         eventDetails: poll.eventDetails,
         room: poll.room,
+        user: poll.userId,
       });
+      await savedPoll.populate("user", "username email");
       io.to(poll.room).emit("sending proposal", savedPoll);
     } catch (err) {
       console.error("Cant post proposal", err);
@@ -228,14 +255,14 @@ io.on("connection", (socket) => {
         {
           $or: [{ _id: userId }, { email: { $in: invitedEmails } }],
         },
-        { $addToSet: { rooms: savedRoom._id } }
+        { $addToSet: { rooms: savedRoom._id } },
       );
 
       socket.emit("sending room", savedRoom);
 
       const membersToNotify = await User.find(
         { email: { $in: invitedEmails } },
-        "_id"
+        "_id",
       );
       membersToNotify.forEach((member) => {
         io.to(member._id.toString()).emit("sending room", savedRoom);
